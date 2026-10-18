@@ -1,0 +1,9 @@
+{
+  "name": "impresora-ayuda",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ayuda paso a paso para la impresora Epson XP-2200 (web estática)",
+  "scripts": {
+    "dev": "npx --yes serve . -l 3000"
+  }
+}
