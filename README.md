@@ -29,7 +29,7 @@ js/app.js         Lógica: navegación, secciones, luces de la impresora, barra 
 - Teléfono de contacto: `CONTACT` al inicio de `js/data.js`.
 - Cada pantalla es una entrada de `S`. La de inicio es `S.home`; cada guía tiene su entrada (`S.printer`, `S["teams"]`).
 - Las pantallas de **Teams** llevan el prefijo `t-` (`t-join`, `t-share`…). Las de la impresora no.
-- Una pantalla pertenece a una sección según su identificador (ver `secOf` en `js/app.js`). `SECTIONS` define, para cada una, su subtítulo, el pie y adónde llevan “Sí, ya funciona” y “Volver al inicio”.
+- Una pantalla pertenece a una sección según su identificador (ver `secOf` en `js/app.js`). `SECTIONS` define, para cada una, su nombre en las migas, el pie y adónde llevan “Sí, ya funciona” y “Volver al inicio”.
 - Tipos de pantalla: `menu`, `cards`, `guide`, `panel`, `done`, `help`.
 - Bloques de una guía (`blocks`): `p`, `warn`, `tip`, `steps`, `list`, `cases`, `acc`, `btns`, `toolbar` y `demo`.
 - `demo` es una animación en bucle (como un GIF) que repite una acción: `{k:"demo", v:"<nombre en DEMOS>"}`. Se dibuja con HTML y CSS en `DEMOS` (`js/app.js`); tiene botón de pausa y, con movimiento reducido, muestra una imagen fija.

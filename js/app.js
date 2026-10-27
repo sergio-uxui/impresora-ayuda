@@ -354,7 +354,6 @@ function render(){
   if(!S[id]) id = "home";
   var s = S[id], h;
   SEC = SECTIONS[secOf(id)];
-  document.getElementById("sub").textContent = SEC.sub;
   document.getElementById("foot").textContent = SEC.foot;
   switch(s.type){
     case "menu": h = renderMenu(s,id); break;

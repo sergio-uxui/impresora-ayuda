@@ -14,11 +14,11 @@ var CONTACT = { nombre: "Sergio", telefono: "" };
 /* Secciones: cómo se muestra cada guía */
 var SITE = {title:"Step by step"};
 var SECTIONS = {
-  hub:     {sub:"Impresora y videollamadas", home:"home", ok:"t-ok", help:"t-help", srcPrefix:"",
+  hub:     {home:"home", ok:"t-ok", help:"t-help", srcPrefix:"",
             foot:"Guías no oficiales, hechas con cariño. Las ilustraciones son propias; lo que ves en tu pantalla o en tu impresora puede ser algo distinto."},
-  printer: {label:"Impresora", sub:"Impresora Epson XP-2200", home:"printer", ok:"ok", help:"help", srcPrefix:"Guía del usuario Epson XP-2200, ",
+  printer: {label:"Impresora", home:"printer", ok:"ok", help:"help", srcPrefix:"Guía del usuario Epson XP-2200, ",
             foot:"Guía no oficial basada en la Guía del usuario de la Epson XP-2200 (NPD6908-02). Las ilustraciones son propias; el panel real puede verse algo distinto."},
-  teams:   {label:"Videollamadas", sub:"Videollamadas con Microsoft Teams", home:"teams", ok:"t-ok", help:"t-help", srcPrefix:"",
+  teams:   {label:"Videollamadas", home:"teams", ok:"t-ok", help:"t-help", srcPrefix:"",
             foot:"Guía no oficial, basada en las páginas de ayuda de Microsoft y de varias universidades. Teams cambia a menudo: si un botón no está donde se dice, busca su icono."}
 };
 
