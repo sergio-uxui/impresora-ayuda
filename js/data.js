@@ -12,7 +12,7 @@
 var CONTACT = { nombre: "Sergio", telefono: "" };
 
 /* Secciones: cómo se muestra cada guía */
-var SITE = {title:"Ayuda paso a paso"};
+var SITE = {title:"Step by step"};
 var SECTIONS = {
   hub:     {sub:"Impresora y videollamadas", home:"home", ok:"t-ok", help:"t-help", srcPrefix:"",
             foot:"Guías no oficiales, hechas con cariño. Las ilustraciones son propias; lo que ves en tu pantalla o en tu impresora puede ser algo distinto."},

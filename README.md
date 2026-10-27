@@ -1,4 +1,4 @@
-# Ayuda paso a paso
+# Step by step
 
 Web estática, sin dependencias ni paso de compilación. Una sola página con varias guías en español sencillo:
 
@@ -11,6 +11,7 @@ Pensada para usarla con letra grande, leer en voz alta y modo oscuro.
 
 ```
 index.html        Estructura de la página (y los iconos)
+favicon.svg       Icono de la pestaña (la mano del logotipo)
 css/styles.css    Estilos (colores en :root, modo oscuro incluido)
 js/data.js        CONTENIDO: todas las pantallas (objeto S), contacto (CONTACT) y secciones (SECTIONS)
 js/app.js         Lógica: navegación, secciones, luces de la impresora, barra de Teams, voz, tamaño de letra
