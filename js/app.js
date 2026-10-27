@@ -1,10 +1,18 @@
-/* Lógica de la interfaz: navegación por hash, dibujo de luces, voz y tamaño de letra. */
+/* Lógica de la interfaz: navegación por hash, secciones (impresora y Teams), dibujo de luces y de la barra de reunión, voz y tamaño de letra. */
 (function(){
 "use strict";
 
 /* ========= RENDER ========= */
 var main = document.getElementById("main");
 var navCount = 0;
+
+/* Sección de una pantalla: las de Teams empiezan por "t-" (o son "teams"); el resto, la impresora. */
+function secOf(id){
+  if(id === "home") return "hub";
+  if(id === "teams" || id.indexOf("t-") === 0) return "teams";
+  return "printer";
+}
+var SEC = SECTIONS.hub;
 
 function fmt(s){
   return String(s)
@@ -41,37 +49,20 @@ function describeLamps(l){
   return parts.join(". ");
 }
 
-/* Migas de pan: el padre de cada pantalla es la primera desde la que se llega a ella partiendo del inicio */
-var PARENT = (function(){
-  var parent = {home:null}, queue = ["home"];
-  function links(o, out){
-    if(Array.isArray(o)) o.forEach(function(x){ links(x, out); });
-    else if(o && typeof o === "object") Object.keys(o).forEach(function(k){
-      if(k === "to" && typeof o[k] === "string") out.push(o[k]); else links(o[k], out);
-    });
-    return out;
-  }
-  while(queue.length){
-    var id = queue.shift();
-    links(S[id], []).forEach(function(to){
-      if(S[to] && !(to in parent) && to !== "ok" && to !== "help"){ parent[to] = id; queue.push(to); }
-    });
-  }
-  return parent;
-})();
-function crumbLabel(id){ return S[id].crumb || String(S[id].title).replace(/<[^>]+>/g,""); }
+/* Migas: Inicio › Sección › Pantalla */
 function crumbs(id){
-  var path = [id];
-  for(var p = PARENT[id] === undefined ? "home" : PARENT[id]; p; p = PARENT[p]) path.unshift(p);
-  return '<nav class="crumbs" aria-label="Estás aquí"><ol>' + path.map(function(c, i){
-    return i === path.length - 1
-      ? '<li><span aria-current="page">'+esc(crumbLabel(c))+"</span></li>"
-      : '<li><a href="#/'+(c === "home" ? "" : c)+'">'+esc(crumbLabel(c))+"</a></li>";
-  }).join("") + "</ol></nav>";
+  if(id === "home") return "";
+  var c = ['<li><a href="#/">Inicio</a></li>'];
+  if(SEC.label){
+    c.push(id === SEC.home ? '<li><span aria-current="page">'+esc(SEC.label)+'</span></li>' : '<li><a href="#/'+SEC.home+'">'+esc(SEC.label)+'</a></li>');
+  }
+  if(id !== SEC.home) c.push('<li><span aria-current="page">'+esc(S[id].title.replace(/<[^>]+>/g,""))+'</span></li>');
+  return '<nav aria-label="Estás aquí"><ol class="crumbs">'+c.join("")+'</ol></nav>';
 }
 
+/* Botones Volver, Inicio y Leer en voz alta (van en la cabecera) */
 function navRow(id){
-  var h = '<div class="toprow">';
+  var h = "";
   if(id !== "home"){
     h += '<button class="btn" type="button" id="back">← Volver</button>';
     h += '<a class="btn" href="#/">🏠 Inicio</a>';
@@ -79,14 +70,13 @@ function navRow(id){
   if("speechSynthesis" in window){
     h += '<button class="btn" type="button" id="say" aria-pressed="false">🔊 Leer en voz alta</button>';
   }
-  h += "</div>";
-  return id === "home" ? h : h + crumbs(id);
+  return h;
 }
 
 function fixBlock(){
   return '<section class="fix" aria-labelledby="fixh"><h2 id="fixh">¿Se ha solucionado?</h2><div class="row">' +
-    '<a class="btn primary block" href="#/ok">Sí, ya funciona</a>' +
-    '<a class="btn block" href="#/help">No, sigue igual</a></div></section>';
+    '<a class="btn primary block" href="#/'+SEC.ok+'">Sí, ya funciona</a>' +
+    '<a class="btn block" href="#/'+SEC.help+'">No, sigue igual</a></div></section>';
 }
 
 function listOrText(a){
@@ -96,6 +86,114 @@ function listOrText(a){
   return "<p>"+fmt(a)+"</p>";
 }
 
+/* Dibujo orientativo de la barra de controles de una reunión */
+var TOOLS = [
+  ["i-cam","Cámara"],["i-mic","Micrófono"],["i-share","Compartir"],["i-chat","Chat"],
+  ["i-people","Personas"],["i-hand","Levantar la mano"],["i-more","Más"],["i-leave","Salir"]
+];
+function toolbar(){
+  var cells = TOOLS.map(function(t,i){
+    var last = i === TOOLS.length-1;
+    return '<li class="tb'+(last?' leave':'')+'"><span class="tbn" aria-hidden="true">'+(i+1)+'</span>' +
+      '<span class="tbi"><svg aria-hidden="true"><use href="#'+t[0]+'"/></svg></span>' +
+      '<span class="tbl">'+t[1]+'</span></li>';
+  }).join("");
+  return '<ol class="toolbar" aria-label="Botones de la reunión, de izquierda a derecha">'+cells+'</ol>' +
+    '<p class="src">Dibujo orientativo. En tu pantalla los botones pueden estar en otro orden o con otro aspecto, pero los iconos son parecidos.</p>';
+}
+
+/* Animaciones en bucle (como un GIF) que muestran una acción */
+var CURSOR = '<div class="d-cursor"><svg viewBox="0 0 20 28"><path d="M1 1v22l6-5.5 4 9 3.5-1.6-4-8.8H18z" fill="#fff" stroke="#000" stroke-width="1.6" stroke-linejoin="round"/></svg><span class="d-ripple"></span></div>';
+function demoFig(cls, screen, cap){
+  return '<figure class="demo '+cls+'">' +
+    '<div class="demo-screen" aria-hidden="true"><div class="d-fade">'+screen+'</div></div>' +
+    '<figcaption class="demo-cap">'+cap+'<button type="button" class="demo-toggle" aria-pressed="false" aria-label="Pausar la animación">❚❚</button></figcaption>' +
+  '</figure>';
+}
+function dTitle(t){ return '<div class="d-title"><i></i><i></i><i></i><span>'+t+'</span></div>'; }
+function dNote(t){ return '<p class="demo-note">'+fmt(t)+'</p>'; }
+
+/* Piezas de una reunión que reutilizan varias animaciones */
+var D_MEET = dTitle("Reunión con Sergio") +
+  '<div class="d-stage"><div class="d-avatar">S</div><span class="d-name">Sergio</span></div>' +
+  '<div class="d-bar">' +
+    '<span class="d-btn"><svg><use href="#i-cam"/></svg></span>' +
+    '<span class="d-btn"><svg><use href="#i-mic"/></svg></span>' +
+    '<span class="d-btn share"><svg><use href="#i-share"/></svg><span class="d-tip">Compartir</span></span>' +
+    '<span class="d-btn leave"><svg><use href="#i-leave"/></svg></span>' +
+  '</div>';
+var D_PICKER = '<div class="d-picker"><b>¿Qué quieres compartir?</b><div class="d-opts">' +
+    '<div class="d-opt"><i></i>Pantalla</div><div class="d-opt win"><i></i>Ventana</div>' +
+  '</div><div class="d-sound"><i class="d-sw"></i>Incluir sonido</div></div>';
+var D_SHARED = '<div class="d-shared"><div class="d-doc"><i></i><i></i><i></i><i></i></div>' +
+  '<div class="d-banner"><span>●</span>Estás compartiendo<em>Dejar de compartir</em></div></div>';
+
+/* Compartir pantalla: una animación por paso */
+function demoShareBtn(){
+  return demoFig("mini ds1", D_MEET + D_PICKER + CURSOR, dNote("Pulsa **Compartir** en la barra de abajo."));
+}
+function demoSharePick(){
+  return demoFig("mini ds2", D_MEET + D_PICKER + CURSOR, dNote("Elige **Ventana** para enseñar solo esa ventana."));
+}
+function demoShareSound(){
+  return demoFig("mini ds3", D_MEET + D_PICKER + CURSOR, dNote("Activa **Incluir sonido** si hay música o audio."));
+}
+function demoShareBorder(){
+  return demoFig("mini ds4", D_MEET + D_SHARED, dNote("El **borde rojo** marca lo que ven los demás."));
+}
+function demoShareStop(){
+  return demoFig("mini ds5", D_MEET + D_SHARED + '<div class="j-toast">Has dejado de compartir</div>' + CURSOR,
+    dNote("Sube el ratón y pulsa **Dejar de compartir**."));
+}
+
+/* Entrar con el enlace: una animación por paso */
+function demoJoinLink(){
+  return demoFig("mini dj1",
+    dTitle("Mensajes") +
+    '<div class="j-chat"><div class="j-bub"><b>Sergio</b>Hola. Este es el enlace de la clase de hoy a las 17:00:' +
+      '<span class="j-link">Unirse a la reunión de Teams</span></div></div>' +
+    '<div class="j-toast">Abriendo el enlace…</div>' + CURSOR,
+    dNote("Pulsa el enlace del mensaje."));
+}
+function demoJoinOpen(){
+  return demoFig("mini dj2",
+    '<div class="j-url"><i></i><i></i><i></i><span>teams.microsoft.com/meet/…</span></div>' +
+    '<div class="j-page"><b>Unirse a la reunión</b><span>Abrir la aplicación de Teams</span><span>Continuar en este explorador</span></div>' +
+    '<div class="j-dlg"><b>¿Abrir Microsoft Teams?</b><small>Este sitio quiere abrir esta aplicación.</small>' +
+      '<div class="j-dbtns"><u>Cancelar</u><em>Abrir Microsoft Teams</em></div></div>' +
+    '<div class="j-toast">Abriendo Teams…</div>' + CURSOR,
+    dNote("Pulsa **Abrir Microsoft Teams**."));
+}
+function demoJoinLogin(){
+  return demoFig("mini dj3",
+    dTitle("Iniciar sesión") +
+    '<div class="j-login"><b>Iniciar sesión</b>' +
+      '<div class="j-field"><span class="j-typed">tu.nombre@estudiante.uam.es</span></div>' +
+      '<small>¿No puedes acceder a tu cuenta?</small><em class="j-next">Siguiente</em></div>' +
+    '<div class="j-toast">✓ Sesión iniciada</div>' + CURSOR,
+    dNote("Escribe el correo de la universidad y pulsa **Siguiente**."));
+}
+function demoJoinPrejoin(){
+  return demoFig("mini dj4",
+    dTitle("Reunión con Sergio") +
+    '<div class="j-pre"><div class="j-cam"><div class="j-me"></div><span>Tu imagen</span></div>' +
+      '<div class="j-side"><b>Elige audio y vídeo</b>' +
+        '<div class="j-row"><svg><use href="#i-cam"/></svg><i class="j-sw"></i></div>' +
+        '<div class="j-row"><svg><use href="#i-mic"/></svg><i class="j-sw"></i><span class="j-lvl"><i></i><i></i><i></i><i></i><i></i></span></div>' +
+        '<div class="j-row j-aud">🔈 Audio del equipo</div>' +
+        '<em class="j-join">Unirse ahora</em></div></div>' +
+    '<div class="j-toast">Entrando en la reunión…</div>' + CURSOR,
+    dNote("Comprueba que te ves y te oyes, y pulsa **Unirse ahora**."));
+}
+function demoJoinWait(){
+  return demoFig("mini dj5",
+    dTitle("Reunión con Sergio") +
+    '<div class="j-wait"><div class="j-me"></div><p>Alguien de la reunión te dejará entrar pronto</p><span class="j-dots"><i></i><i></i><i></i></span></div>' +
+    '<div class="j-in"><div class="d-avatar">S</div><span class="j-badge">Ya estás dentro</span></div>',
+    dNote("Espera sin cerrar nada: te dejarán pasar."));
+}
+var DEMOS = {"share-btn": demoShareBtn, "share-pick": demoSharePick, "share-sound": demoShareSound, "share-border": demoShareBorder, "share-stop": demoShareStop, "join-link": demoJoinLink, "join-open": demoJoinOpen, "join-login": demoJoinLogin, "join-prejoin": demoJoinPrejoin, "join-wait": demoJoinWait};
+
 function renderBlock(b){
   switch(b.k){
     case "p": return "<p>"+fmt(b.t)+"</p>";
@@ -104,12 +202,12 @@ function renderBlock(b){
     case "steps":
       return (b.h?"<h2>"+fmt(b.h)+"</h2>":"") + '<ol class="steps">' + b.items.map(function(it){
         if(typeof it === "string") return "<li>"+fmt(it)+"</li>";
-        return "<li>"+fmt(it.t)+(it.n?'<span class="stepnote">'+fmt(it.n)+"</span>":"")+"</li>";
+        return "<li>"+fmt(it.t)+(it.n?'<span class="stepnote">'+fmt(it.n)+"</span>":"")+(it.demo && DEMOS[it.demo]?DEMOS[it.demo]():"")+"</li>";
       }).join("") + "</ol>";
     case "list":
       return (b.h?"<h2>"+fmt(b.h)+"</h2>":"") + '<ul class="list">'+b.items.map(function(x){return "<li>"+fmt(x)+"</li>"}).join("")+"</ul>";
     case "cases":
-      return b.items.map(function(c){
+      return (b.h?"<h2>"+fmt(b.h)+"</h2>":"") + b.items.map(function(c){
         return '<article class="case"><h3>'+fmt(c.q)+"</h3>"+listOrText(c.a)+
           (c.to?'<a class="btn" href="#/'+c.to+'">'+esc(c.toLabel||"Ver cómo")+"</a>":"")+"</article>";
       }).join("");
@@ -119,17 +217,64 @@ function renderBlock(b){
       }).join("");
     case "btns":
       return b.items.map(function(x){return '<a class="btn block" href="#/'+x.to+'">'+esc(x.label)+"</a>"}).join("");
-    case "fixrow": return "";
+    case "toolbar": return toolbar();
+    case "demo": return DEMOS[b.v] ? DEMOS[b.v]() : "";
   }
   return "";
 }
 
-function renderMenu(s,id){
-  var h = "<h1>"+fmt(s.title)+"</h1>";
-  if(s.intro) h += '<p class="lead">'+fmt(s.intro)+"</p>";
-  h += '<nav class="choices" aria-label="Opciones">' + s.items.map(function(it){
+function choices(items){
+  return '<nav class="choices" aria-label="Opciones">' + items.map(function(it){
     return '<a class="choice" href="#/'+it.to+'"><span class="ci" aria-hidden="true">'+it.ic+'</span><span class="ct"><b>'+fmt(it.t)+"</b>"+(it.sub?"<small>"+fmt(it.sub)+"</small>":"")+'</span><span class="chev" aria-hidden="true">›</span></a>';
   }).join("") + "</nav>";
+}
+
+/* Pestañas de un menú. La elegida se recuerda en la sesión para volver a ella con "Volver" */
+function tabsHtml(s,id){
+  var cur = 0;
+  try{ cur = +(sessionStorage.getItem("tab-"+id) || 0); }catch(e){}
+  if(!s.tabs[cur]) cur = 0;
+  var bar = s.tabs.map(function(t,i){
+    return '<button type="button" role="tab" class="tab" id="tab-'+i+'" aria-controls="tp-'+i+'" aria-selected="'+(i===cur)+'"'+(i===cur?"":' tabindex="-1"')+'>'+esc(t.label)+'</button>';
+  }).join("");
+  var panels = s.tabs.map(function(t,i){
+    return '<div role="tabpanel" class="tabpanel" id="tp-'+i+'" aria-labelledby="tab-'+i+'"'+(i===cur?"":" hidden")+'>'+
+      (t.intro?'<p class="tabintro">'+fmt(t.intro)+'</p>':"")+choices(t.items)+'</div>';
+  }).join("");
+  return '<div class="tabs" data-menu="'+id+'"><div class="tablist" role="tablist" aria-label="Momento de la llamada">'+bar+'</div>'+panels+'</div>';
+}
+function bindTabs(){
+  var box = main.querySelector(".tabs");
+  if(!box) return;
+  var tabs = [].slice.call(box.querySelectorAll('[role="tab"]'));
+  function select(i, focus){
+    tabs.forEach(function(t,j){
+      t.setAttribute("aria-selected", String(i===j));
+      if(i===j) t.removeAttribute("tabindex"); else t.setAttribute("tabindex","-1");
+      document.getElementById(t.getAttribute("aria-controls")).hidden = i!==j;
+    });
+    if(focus) tabs[i].focus();
+    try{ sessionStorage.setItem("tab-"+box.dataset.menu, String(i)); }catch(e){}
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener("click", function(){ select(i); });
+    t.addEventListener("keydown", function(e){
+      var n = tabs.length, k = e.key;
+      if(k==="ArrowRight"||k==="ArrowLeft"||k==="Home"||k==="End"){
+        e.preventDefault();
+        select(k==="Home"?0:k==="End"?n-1:(i+(k==="ArrowRight"?1:n-1))%n, true);
+      }
+    });
+  });
+}
+
+function renderMenu(s,id){
+  var title = fmt(s.title);
+  var h = s.logo
+    ? '<div class="h1row"><svg class="h1logo" aria-hidden="true"><use href="#'+s.logo+'"/></svg><h1>'+title+'</h1></div>'
+    : "<h1>"+title+"</h1>";
+  if(s.intro) h += '<p class="lead">'+fmt(s.intro)+"</p>";
+  h += s.tabs ? tabsHtml(s,id) : choices(s.items);
   if(s.extra) h += s.extra.map(function(x){return '<a class="btn block" href="#/'+x.to+'">'+esc(x.label)+"</a>"}).join("");
   return h;
 }
@@ -147,8 +292,8 @@ function renderGuide(s,id){
   if(s.lamps) h += lamp(s.lamps).replace('class="strip"','class="strip big"');
   if(s.lead) h += '<p class="lead">'+fmt(s.lead)+"</p>";
   h += s.blocks.map(renderBlock).join("");
-  if(s.fix !== false) h += fixBlock();
-  if(s.src) h += '<p class="src">Fuente: Guía del usuario Epson XP-2200, '+esc(s.src)+".</p>";
+  if(s.fix === true || (s.fix !== false && secOf(id) === "printer")) h += fixBlock();
+  if(s.src) h += '<p class="src">Fuente: '+esc(SEC.srcPrefix)+esc(s.src)+".</p>";
   return h;
 }
 
@@ -181,9 +326,10 @@ function renderPanel(s){
     '<a class="btn block primary" href="#/lights">Ver qué significan las luces</a>';
 }
 function renderDone(s){
-  return "<h1>"+s.title+"</h1><p class=\"lead\">Qué bien. Si vuelve a pasar, aquí estará la ayuda.</p><a class=\"btn primary block\" href=\"#/\">Volver al inicio</a>";
+  return "<h1>"+s.title+"</h1><p class=\"lead\">Qué bien. Si vuelve a pasar, aquí estará la ayuda.</p><a class=\"btn primary block\" href=\"#/"+SEC.home+"\">Volver al inicio</a>";
 }
 function renderHelp(s){
+  if(s.extraHtml) return renderHelpGeneric(s);
   var who = CONTACT.telefono
     ? '<p class="contact"><a href="tel:'+esc(CONTACT.telefono.replace(/\s+/g,""))+'">📞 Llamar a '+esc(CONTACT.nombre)+" · "+esc(CONTACT.telefono)+"</a></p>"
     : '<p class="contact">Pregunta a '+esc(CONTACT.nombre)+"</p>";
@@ -193,13 +339,23 @@ function renderHelp(s){
     '<ul class="list"><li>El modelo: <b>XP-2200</b>.</li><li>El <b>número de serie</b>: está en una etiqueta, normalmente en la parte de atrás de la impresora.</li><li>El nombre y la versión del sistema del ordenador (Windows o Mac).</li></ul>'+
     '<a class="btn block primary" href="https://www.epson.eu/support" target="_blank" rel="noopener">Soporte técnico de Epson en Europa</a>'+
     '<p class="src">El manual indica que la forma de contactar con Epson figura en el documento de garantía paneuropea que viene con la impresora.</p>'+
-    '<a class="btn block" href="#/">Volver al inicio</a>';
+    '<a class="btn block" href="#/'+SEC.home+'">Volver al inicio</a>';
+}
+function renderHelpGeneric(s){
+  var who = CONTACT.telefono
+    ? '<p class="contact"><a href="tel:'+esc(CONTACT.telefono.replace(/\s+/g,""))+'">📞 Llamar a '+esc(CONTACT.nombre)+" · "+esc(CONTACT.telefono)+"</a></p>"
+    : '<p class="contact">Pregunta a '+esc(CONTACT.nombre)+"</p>";
+  return "<h1>"+s.title+"</h1><p class=\"lead\">"+fmt(s.lead||"")+"</p>"+who+s.extraHtml+
+    '<a class="btn block" href="#/'+SEC.home+'">Volver al inicio</a>';
 }
 
 function render(){
   var id = (location.hash.replace(/^#\/?/,"")) || "home";
   if(!S[id]) id = "home";
   var s = S[id], h;
+  SEC = SECTIONS[secOf(id)];
+  document.getElementById("sub").textContent = SEC.sub;
+  document.getElementById("foot").textContent = SEC.foot;
   switch(s.type){
     case "menu": h = renderMenu(s,id); break;
     case "cards": h = renderCards(s); break;
@@ -210,12 +366,22 @@ function render(){
     default: h = "";
   }
   stopSpeech();
-  main.innerHTML = navRow(id) + '<div id="readable">' + h + "</div>";
-  document.title = (id==="home" ? "Ayuda con mi impresora" : s.title.replace(/<[^>]+>/g,"") + " · Ayuda con mi impresora");
+  document.getElementById("pagenav").innerHTML = navRow(id);
+  main.innerHTML = crumbs(id) + '<div id="readable">' + h + "</div>";
+  document.title = (id==="home" ? SITE.title : s.title.replace(/<[^>]+>/g,"") + " · " + SITE.title);
   var back = document.getElementById("back");
   if(back) back.addEventListener("click", function(){ if(navCount>0) history.back(); else location.hash="#/"; });
   var say = document.getElementById("say");
   if(say) say.addEventListener("click", toggleSpeech);
+  bindTabs();
+  main.querySelectorAll(".demo-toggle").forEach(function(t){
+    t.addEventListener("click", function(){
+      var paused = t.closest(".demo").classList.toggle("paused");
+      t.setAttribute("aria-pressed", String(paused));
+      t.setAttribute("aria-label", paused ? "Reanudar la animación" : "Pausar la animación");
+      t.textContent = paused ? "▶" : "❚❚";
+    });
+  });
   window.scrollTo(0,0);
   var h1 = main.querySelector("h1");
   if(h1){ h1.setAttribute("tabindex","-1"); h1.focus({preventScroll:true}); }
@@ -250,15 +416,6 @@ document.querySelectorAll(".sizes button").forEach(function(b){ b.addEventListen
 var saved = "0"; try{ saved = localStorage.getItem("fs") || "0"; }catch(e){}
 setFs(saved);
 
-/* Transición suave entre pantallas */
-var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)");
-function go(){
-  if(calm && calm.matches){ render(); return; }
-  if(document.startViewTransition){ document.startViewTransition(render); return; }
-  render();
-  main.classList.remove("enter"); void main.offsetWidth; main.classList.add("enter");
-}
-
-window.addEventListener("hashchange", function(){ navCount++; go(); });
+window.addEventListener("hashchange", function(){ navCount++; render(); });
 render();
 })();

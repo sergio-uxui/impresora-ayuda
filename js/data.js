@@ -1,18 +1,42 @@
 /* ===================================================================
    Contenido de la ayuda. Aquí se editan los textos.
-   Cada pantalla es una entrada de S (S.home, S["g-jam"], ...).
-   Fuente: Guía del usuario Epson XP-2200 (NPD6908-02).
+   Cada pantalla es una entrada de S.
+   - Impresora Epson XP-2200: pantallas "printer", "lights", "g-…", "h-…", etc.
+     Fuente: Guía del usuario Epson XP-2200 (NPD6908-02).
+   - Videollamadas con Teams: pantallas con prefijo "t-" y la entrada "teams".
+     Fuentes: Microsoft Soporte y guías de universidades (ver "src").
    =================================================================== */
 
 /* ========= AJUSTES ========= */
 // Pon aquí el teléfono de quien ayuda (por ejemplo "+34 600 000 000"). Si se deja vacío, solo se muestra el nombre.
 var CONTACT = { nombre: "Sergio", telefono: "" };
 
+/* Secciones: cómo se muestra cada guía */
+var SITE = {title:"Ayuda paso a paso"};
+var SECTIONS = {
+  hub:     {sub:"Impresora y videollamadas", home:"home", ok:"t-ok", help:"t-help", srcPrefix:"",
+            foot:"Guías no oficiales, hechas con cariño. Las ilustraciones son propias; lo que ves en tu pantalla o en tu impresora puede ser algo distinto."},
+  printer: {label:"Impresora", sub:"Impresora Epson XP-2200", home:"printer", ok:"ok", help:"help", srcPrefix:"Guía del usuario Epson XP-2200, ",
+            foot:"Guía no oficial basada en la Guía del usuario de la Epson XP-2200 (NPD6908-02). Las ilustraciones son propias; el panel real puede verse algo distinto."},
+  teams:   {label:"Videollamadas", sub:"Videollamadas con Microsoft Teams", home:"teams", ok:"t-ok", help:"t-help", srcPrefix:"",
+            foot:"Guía no oficial, basada en las páginas de ayuda de Microsoft y de varias universidades. Teams cambia a menudo: si un botón no está donde se dice, busca su icono."}
+};
+
 /* ========= DATOS ========= */
 var S = {};
 
+/* ---- Inicio general ---- */
+S.home = {type:"menu", title:"¿En qué te ayudo?",
+  intro:"Elige la guía que necesitas.",
+  items:[
+    {ic:"🖨️", t:"La impresora", sub:"Epson XP-2200: luces, papel, tinta, Wi-Fi…", to:"printer"},
+    {ic:"🎥", t:"Videollamadas con Teams", sub:"Entrar a una clase, compartir pantalla…", to:"teams"}
+  ]
+};
+
+/* ################ IMPRESORA ################ */
 /* ---- Inicio ---- */
-S.home = {type:"menu", crumb:"Inicio", title:"¿Qué le pasa a la impresora?",
+S.printer = {type:"menu", title:"¿Qué le pasa a la impresora?",
   intro:"Elige lo que más se parezca. Te voy guiando paso a paso.",
   items:[
     {ic:"💡", t:"Veo luces encendidas o parpadeando", to:"lights"},
@@ -26,7 +50,7 @@ S.home = {type:"menu", crumb:"Inicio", title:"¿Qué le pasa a la impresora?",
 };
 
 /* ---- Luces ---- */
-S.lights = {type:"menu", crumb:"Luces", title:"¿Qué luz te llama la atención?",
+S.lights = {type:"menu", title:"¿Qué luz te llama la atención?",
   intro:"Mira los botones de la parte delantera de la impresora. Elige la luz que está encendida o parpadeando.",
   items:[
     {ic:"💧", t:"La luz de la tinta (la gota)", to:"lights-ink"},
@@ -66,7 +90,7 @@ S["lights-many"] = {type:"cards", title:"Casi todas las luces a la vez", intro:C
 ]};
 
 /* ---- Papel ---- */
-S.paper = {type:"menu", crumb:"Papel", title:"Problema con el papel", intro:"¿Qué ocurre?", items:[
+S.paper = {type:"menu", title:"Problema con el papel", intro:"¿Qué ocurre?", items:[
   {ic:"🧻", t:"Papel atascado", to:"g-jam"},
   {ic:"🚫", t:"Dice que no hay papel, pero sí hay", to:"g-feed"},
   {ic:"↪️", t:"Entra torcido o salen varias hojas juntas", to:"g-feed"},
@@ -140,13 +164,13 @@ S["g-load"] = {type:"guide", title:"Cómo cargar el papel", fix:false,
   ], src:"págs. 25–28"};
 
 /* ---- Tinta ---- */
-S.ink = {type:"menu", crumb:"Tinta", title:"Tinta y cartuchos", intro:"¿Qué quieres hacer?", items:[
+S.ink = {type:"menu", title:"Tinta y cartuchos", intro:"¿Qué quieres hacer?", items:[
   {ic:"🔄", t:"Cambiar un cartucho", to:"ink-replace"},
   {ic:"💡", t:"La luz de la tinta está encendida", to:"lights-ink"},
   {ic:"🛒", t:"Qué cartuchos comprar", to:"g-ink-codes"},
   {ic:"🎨", t:"Se acabó un color y quiero seguir imprimiendo", to:"g-ink-temp"}
 ]};
-S["ink-replace"] = {type:"menu", crumb:"Cambiar un cartucho", title:"Cambiar un cartucho", intro:"¿Cómo está ahora la luz de la tinta (la gota)?", items:[
+S["ink-replace"] = {type:"menu", title:"Cambiar un cartucho", intro:"¿Cómo está ahora la luz de la tinta (la gota)?", items:[
   {ic:"⚪", t:"Apagada", sub:"Cambio un cartucho antes de que se acabe", to:"g-replace-off"},
   {ic:"🟠", t:"Fija", sub:"Un cartucho está agotado", to:"g-replace-on"},
   {ic:"✨", t:"Parpadea", sub:"Un cartucho se está acabando", to:"g-replace-on"}
@@ -231,7 +255,7 @@ S["g-ink-temp"] = {type:"guide", title:"Seguir imprimiendo con un cartucho agota
   ], src:"págs. 137–140"};
 
 /* ---- Calidad ---- */
-S.quality = {type:"menu", crumb:"Sale mal impreso", title:"Sale mal impreso", intro:"¿Qué ves en la hoja?", items:[
+S.quality = {type:"menu", title:"Sale mal impreso", intro:"¿Qué ves en la hoja?", items:[
   {ic:"🌈", t:"Rayas, colores que faltan u hoja en blanco", to:"g-clean"},
   {ic:"🔍", t:"Texto borroso o líneas verticales torcidas", to:"g-align"},
   {ic:"🖍️", t:"Manchas, sale sucio o pegajoso", to:"g-smears"},
@@ -313,7 +337,7 @@ S["g-layout"] = {type:"guide", title:"Sale cortado o mal colocado",
   ], src:"págs. 110–112"};
 
 /* ---- No imprime / no conecta ---- */
-S.noprint = {type:"menu", crumb:"No imprime", title:"No imprime o no conecta", intro:"¿Qué pasa?", items:[
+S.noprint = {type:"menu", title:"No imprime o no conecta", intro:"¿Qué pasa?", items:[
   {ic:"🖨️", t:"Le doy a imprimir y no sale nada", to:"g-noprint"},
   {ic:"📶", t:"No se conecta al Wi-Fi", to:"wifi"},
   {ic:"⏻", t:"No se enciende o no se apaga", to:"g-power"}
@@ -334,7 +358,7 @@ S["g-noprint"] = {type:"guide", title:"Le doy a imprimir y no sale nada",
     {k:"tip", h:"Prueba rápida", t:"Pon papel y pulsa el botón **i** de la impresora. Si imprime un informe, la impresora funciona bien y el problema está en la conexión o en el ordenador."}
   ], src:"págs. 96–100"};
 
-S.wifi = {type:"menu", crumb:"Wi-Fi", title:"Conexión Wi-Fi", intro:"¿Qué ocurre?", items:[
+S.wifi = {type:"menu", title:"Conexión Wi-Fi", intro:"¿Qué ocurre?", items:[
   {ic:"🔁", t:"Primeros pasos", sub:"Arreglan la mayoría de los casos", to:"g-wifi-basic"},
   {ic:"🧾", t:"He imprimido el informe y sale un código “E-…”", to:"g-wifi-codes"},
   {ic:"🔎", t:"Está conectada pero el ordenador no la ve", to:"g-wifi-samenet"},
@@ -484,7 +508,7 @@ S["g-error"] = {type:"guide", title:"Error interno de la impresora", lamps:{powe
   ], src:"pág. 22"};
 
 /* ---- Cómo hago ---- */
-S.howto = {type:"menu", crumb:"Cómo hago…", title:"Cómo hago…", intro:"Elige lo que quieres hacer.", items:[
+S.howto = {type:"menu", title:"Cómo hago…", intro:"Elige lo que quieres hacer.", items:[
   {ic:"📑", t:"Hacer una fotocopia", to:"h-copy"},
   {ic:"🖥️", t:"Escanear al ordenador", to:"h-scan"},
   {ic:"📥", t:"Cargar papel", to:"g-load"},
@@ -535,8 +559,185 @@ S["h-off"] = {type:"guide", title:"Apagar bien la impresora", fix:false,
   ], src:"págs. 12 y 65"};
 
 /* ---- Ayuda final ---- */
-S.panel = {type:"panel", crumb:"El panel", title:"Conoce el panel de la impresora"};
+S.panel = {type:"panel", title:"Conoce el panel de la impresora"};
 
 S.ok = {type:"done", title:"Me alegro de que ya funcione"};
 S.help = {type:"help", title:"Si sigue sin funcionar"};
 
+
+
+/* ################ VIDEOLLAMADAS (TEAMS) ################ */
+/* ---- Inicio ---- */
+S["teams"] = {type:"menu", title:"¿Qué quieres hacer?", logo:"i-teams",
+  intro:"Elige si todavía no has entrado o si ya estás en la llamada. Te voy guiando paso a paso.",
+  tabs:[
+    {label:"Antes de entrar", intro:"Para prepararte y entrar en la llamada.", items:[
+      {ic:"🔗", t:"Entrar a una clase o charla", sub:"Con el enlace que me han enviado", to:"t-join"},
+      {ic:"🎬", t:"Probar cámara y sonido", sub:"En la pantalla previa, antes de unirte", to:"t-prejoin"},
+      {ic:"⏱️", t:"Lista rápida antes de la clase", to:"t-checklist"},
+      {ic:"🛠️", t:"Algo no funciona", sub:"No me ven, no me oyen, no puedo entrar…", to:"t-problems"}
+    ]},
+    {label:"Ya estoy dentro", intro:"Para cuando ya estás en la llamada.", items:[
+      {ic:"🎛️", t:"¿Qué hace cada botón?", to:"t-controls"},
+      {ic:"🖥️", t:"Compartir pantalla", to:"t-share"},
+      {ic:"🛠️", t:"Algo no funciona", sub:"No me ven, no me oyen, no puedo compartir…", to:"t-problems"}
+    ]}
+  ]
+};
+
+/* ---- Entrar ---- */
+S["t-join"] = {type:"guide", title:"Entrar con el enlace",
+  lead:"Alguien te ha enviado un enlace de la clase, la charla o la llamada.",
+  blocks:[
+    {k:"steps", items:[
+      {t:"Abre el mensaje o el correo y pulsa el **enlace de la reunión**.", demo:"join-link"},
+      {t:"El navegador puede preguntar si quieres abrir **Microsoft Teams**. Di que sí.", n:"Si no se abre, busca la opción **Abrir Teams en el navegador**: funciona sin instalar nada.", demo:"join-open"},
+      {t:"Si te pide entrar, pulsa **Iniciar sesión** y usa **la cuenta de la universidad**.", n:"Si sale otra cuenta, pulsa **Cambiar** junto a ella y elige la correcta.", demo:"join-login"},
+      {t:"Verás la **pantalla previa** (tu imagen y los botones de cámara y micrófono). Mira [[t-prejoin|Antes de entrar]] y pulsa **Unirse** (o **Unirse ahora**).", demo:"join-prejoin"},
+      {t:"Puede que aparezca una **sala de espera**. No cierres nada: espera a que el organizador te deje pasar.", n:"Es normal. Le llega un aviso y te admite.", demo:"join-wait"}
+    ]},
+    {k:"acc", items:[
+      {q:"Otra forma: desde el calendario de Teams", a:["Abre Teams y pulsa el icono **Calendario**.","Pulsa la reunión y luego **Unirse**."]},
+      {q:"Otra forma: con el número de reunión", a:["En el calendario, pulsa la flecha junto a **Reunirse ahora** y elige **Unirse con un id. #**.","Escribe el **identificador** y el **código de acceso** (vienen en la invitación).","Si no te funciona, usa mejor el enlace."]}
+    ]},
+    {k:"btns", items:[{label:"No puedo entrar", to:"t-p-enter"}]}
+  ], src:"Microsoft Soporte, “Unirse a una reunión en Microsoft Teams”; UNED, guía para estudiantes"};
+
+S["t-prejoin"] = {type:"guide", title:"Antes de entrar: cámara y sonido",
+  lead:"Esta pantalla aparece justo antes de entrar. Es el mejor momento para comprobar que todo funciona.",
+  blocks:[
+    {k:"steps", items:[
+      {t:"**Mírate.** Si ves tu imagen, la cámara funciona. Si no, usa el interruptor de la cámara para encenderla.", n:"Puedes entrar con la cámara apagada si lo prefieres."},
+      {t:"**Habla un poco** y mira si se mueve la barrita del micrófono. Si se mueve, te oyen.", n:"Dependiendo de tu pantalla, puede ser una barra o un indicador que sube y baja."},
+      "Comprueba que el sonido está en **Audio del equipo** (el del propio ordenador).",
+      {t:"Si usas **auriculares** o una **cámara externa**, abre los ajustes de dispositivos y elígelos en los desplegables.", n:"Con auriculares se oye mejor y se evitan ecos."},
+      "Cuando todo esté bien, pulsa **Unirse ahora**."
+    ]},
+    {k:"tip", h:"Si el navegador pregunta", t:"Si entras desde el navegador, puede pedir permiso para usar la cámara y el micrófono. Pulsa **Permitir**."},
+    {k:"btns", items:[{label:"No me ven o no me oyen", to:"t-problems"}]}
+  ], src:"UNED, “Conectarse a una tutoría (estudiantes)”; Microsoft Soporte"};
+
+/* ---- Dentro de la reunión ---- */
+S["t-controls"] = {type:"guide", title:"¿Qué hace cada botón?",
+  lead:"Cuando mueves el ratón aparece la barra con los botones. Cada número del dibujo se explica abajo.",
+  blocks:[
+    {k:"toolbar"},
+    {k:"steps", items:[
+      "**Cámara.** Enciende o apaga tu imagen. Si el icono está tachado, te ven desactivada.",
+      "**Micrófono.** Si está tachado, nadie te oye. Pulsa para activarlo cuando vayas a hablar.",
+      {t:"**Compartir (pantalla).** Para enseñar tu pantalla. Mira [[t-share|Compartir pantalla]].", n:"Algunas versiones lo llaman **Compartir pantalla**."},
+      "**Chat.** Para escribir mensajes que ven todos. Muy útil si el micrófono no funciona.",
+      "**Personas.** Muestra quién está en la reunión.",
+      "**Levantar la mano.** Para pedir la palabra sin interrumpir.",
+      "**Más** (tres puntos). Aquí están los ajustes de cámara, micrófono y altavoz, y otras opciones.",
+      {t:"**Salir** (botón rojo). Sale de la reunión.", n:"Según la versión se llama **Salir**, **Dejar** o **Colgar**. Si te equivocas, vuelve a entrar con el mismo enlace."}
+    ]},
+    {k:"tip", h:"Un buen hábito", t:"Mantén el micrófono silenciado mientras habla otra persona. Actívalo solo cuando te toque."},
+    {k:"p", t:"Microsoft ha cambiado hace poco el diseño de los controles de las reuniones y ha movido de sitio algunos botones, como **Levantar la mano** y **Salir**. Por eso conviene fijarse en el icono y no en la posición."}
+  ], src:"Microsoft Adoption, “Pruebe la reunión rediseñada”; UPM, “Videoconferencias con Teams – Guía de manejo”"};
+
+S["t-share"] = {type:"guide", title:"Compartir pantalla",
+  lead:"Así la otra persona ve lo mismo que tú: un ejercicio, un documento, una web.",
+  blocks:[
+    {k:"steps", items:[
+      {t:"Con la reunión abierta, pulsa **Compartir pantalla** en la barra de botones.", demo:"share-btn"},
+      {t:"Elige **qué enseñar**: la pantalla entera o solo una ventana.", n:"Para un ejercicio, elige **la ventana** del ejercicio: solo se ve eso.", demo:"share-pick"},
+      {t:"Si el ejercicio tiene **música o audio**, activa **Incluir sonido** antes de compartir.", n:"Con esta opción, todo el sonido del ordenador se oye en la reunión, incluidos los avisos.", demo:"share-sound"},
+      {t:"Cuando empieza, verás un **borde alrededor** de lo que estás enseñando. Ahora te ven.", demo:"share-border"},
+      {t:"Para **parar**, mueve el ratón a la parte de arriba de la pantalla y pulsa **Dejar de compartir**.", demo:"share-stop"}
+    ]},
+    {k:"warn", h:"Antes de compartir", t:"Si compartes la pantalla entera, la otra persona ve todo lo que tengas abierto, incluidos correos y mensajes que lleguen. Cierra lo que no quieras enseñar, o comparte solo una ventana."},
+    {k:"tip", h:"Si Sergio necesita mover el ratón por ti", t:"En la barra de arriba pulsa **Ceder el control** y elige a Sergio. Para recuperarlo, pulsa **Retirar**. Hazlo solo con personas de confianza."},
+    {k:"btns", items:[{label:"No puedo compartir la pantalla", to:"t-p-share"}]}
+  ], src:"Microsoft Soporte, “Presentar contenido en reuniones de Microsoft Teams”; UPM, guía de manejo"};
+
+/* ---- Problemas ---- */
+S["t-problems"] = {type:"menu", title:"¿Qué ocurre?", intro:"Elige lo que más se parezca.", items:[
+  {ic:"📷", t:"No me ven", sub:"La cámara no funciona", to:"t-p-cam"},
+  {ic:"🎤", t:"No me oyen", sub:"El micrófono no funciona", to:"t-p-mic"},
+  {ic:"🔈", t:"No oigo a los demás", to:"t-p-hear"},
+  {ic:"🚪", t:"No puedo entrar", to:"t-p-enter"},
+  {ic:"🖥️", t:"No puedo compartir la pantalla", to:"t-p-share"}
+]};
+
+S["t-p-cam"] = {type:"guide", title:"No me ven (la cámara)", fix:true,
+  lead:"Vamos de lo más fácil a lo menos.",
+  blocks:[
+    {k:"steps", items:[
+      "Mira el botón de la **cámara** en la reunión. Si está tachado, púlsalo para encenderla.",
+      "Cierra otros programas que puedan estar usando la cámara, como **Skype** u otra aplicación de videollamadas.",
+      {t:"En Windows, abre **Configuración** y entra en **Privacidad** (en Windows 11, **Privacidad y seguridad**) y luego **Cámara**. Comprueba que el acceso a la cámara está **activado**.", n:"Si ya estaba activado, desactívalo y vuélvelo a activar."},
+      "Si la cámara es externa, **desconéctala y vuelve a conectarla**.",
+      "Si nada funciona, **reinicia el ordenador** y entra otra vez con el enlace."
+    ]},
+    {k:"tip", h:"Si entras desde el navegador", t:"El navegador tiene su propio permiso para la cámara. Pulsa el candado que hay junto a la dirección y permite la **cámara** y el **micrófono**."}
+  ], src:"guía de ayuda para cámara en Teams (Colegio Alemán de Barranquilla) y Microsoft Soporte"};
+
+S["t-p-mic"] = {type:"guide", title:"No me oyen (el micrófono)", fix:true,
+  blocks:[
+    {k:"steps", items:[
+      "Mira el botón del **micrófono**. Si está tachado, púlsalo para activarlo.",
+      {t:"Si no puedes activarlo, quizá el organizador lo ha **bloqueado**. Pulsa **Levantar la mano** o escribe en el **Chat** y te lo habilitarán.", n:"Es habitual en charlas con mucha gente."},
+      {t:"Abre **Más** (tres puntos) y entra en los ajustes de **dispositivos**. Comprueba que está elegido **el micrófono correcto**.", n:"Si usas auriculares con micrófono, elígelos aquí."},
+      "En Windows, abre **Configuración** > **Privacidad** (o **Privacidad y seguridad**) > **Micrófono** y comprueba que el acceso está activado.",
+      "Si nada funciona, sal de la reunión y vuelve a entrar con el enlace."
+    ]},
+    {k:"tip", h:"Mientras tanto", t:"Puedes escribir en el **Chat** de la reunión para que te lean."}
+  ], src:"UNED, guía para estudiantes; Microsoft Soporte (permisos de dispositivos)"};
+
+S["t-p-hear"] = {type:"guide", title:"No oigo a los demás", fix:true,
+  blocks:[
+    {k:"steps", items:[
+      "Mira el icono del **altavoz** junto al reloj de Windows (abajo a la derecha). Sube el volumen y comprueba que no está en silencio.",
+      "Si usas **auriculares**, comprueba que están bien conectados y encendidos.",
+      "En Teams, abre **Más** (tres puntos), entra en los ajustes de **dispositivos** y elige el **altavoz** correcto.",
+      "Pregunta a los demás si tienen el micrófono encendido: a veces el problema es de ellos."
+    ]}
+  ], src:"Microsoft Soporte y guías de universidades (ajustes de dispositivos)"};
+
+S["t-p-enter"] = {type:"guide", title:"No puedo entrar", fix:true,
+  blocks:[
+    {k:"cases", items:[
+      {q:"Me pide una cuenta y no sé cuál", a:"Usa **la cuenta de la universidad**. Si Teams ha elegido otra, pulsa **Cambiar** junto a la cuenta y elige la correcta."},
+      {q:"Se queda en “espera”", a:"Es la **sala de espera**. El organizador te tiene que dejar pasar. Espera un minuto y, si tardan, avísales por WhatsApp."},
+      {q:"El enlace no abre Teams", a:["Prueba la opción **Abrir Teams en el navegador**.","Si tampoco funciona, pide a quien organiza que te envíe el enlace otra vez."]},
+      {q:"Sale un error de inicio de sesión", a:["Comprueba que escribes bien tu correo de la universidad y tu contraseña.","Si sigue igual, es un problema de la cuenta: mira [[t-help|¿A quién pregunto?]]"]},
+      {q:"Teams va muy lento o raro", a:["Cierra otros programas y vuelve a entrar.","Si usas la aplicación de Teams, pulsa tu foto de perfil y busca **Buscar actualizaciones**."]}
+    ]}
+  ], src:"Microsoft Soporte; UNED; guía de ayuda para cámara en Teams"};
+
+S["t-p-share"] = {type:"guide", title:"No puedo compartir la pantalla", fix:true,
+  blocks:[
+    {k:"steps", items:[
+      "Comprueba que estás **dentro** de la reunión y que ves la barra de botones.",
+      {t:"Si sale un **mensaje de error**, aparecen opciones para **reiniciar la aplicación** o **volver a unirse**. Elige una.", n:"Normalmente basta con salir y entrar de nuevo con el enlace."},
+      "Si el botón no aparece o no deja pulsarlo, puede que el organizador no te haya dado permiso. Pídeselo."
+    ]},
+    {k:"tip", h:"Para Sergio (el organizador)", t:"Por defecto, en algunas reuniones solo presenta quien organiza. Cambia el ajuste de **¿Quién puede presentar?** a **Todos** en **Opciones de reunión** o **Administrar permisos**."}
+  ], src:"Microsoft Soporte, “Presentar contenido en reuniones de Microsoft Teams”; UPM, guía de manejo"};
+
+/* ---- Listas y palabras ---- */
+S["t-checklist"] = {type:"guide", title:"Lista rápida antes de la clase",
+  lead:"Cinco minutos antes de la hora. Así evitas casi todos los problemas.",
+  blocks:[
+    {k:"list", items:[
+      "Ordenador **enchufado** al cargador.",
+      "Buscar el **enlace** de la clase (en el correo, en Moodle o en WhatsApp) y tenerlo a mano.",
+      "**Cerrar** los programas que no hagan falta.",
+      "Ponerte los **auriculares**, si usas.",
+      "Entrar con el enlace **unos minutos antes**: así te da tiempo a probar la cámara y el sonido.",
+      "En la pantalla previa: comprobar que **te ves** y que **te oyes** (mira [[t-prejoin|Antes de entrar]]).",
+      "Entrar con el **micrófono silenciado**."
+    ]}
+  ]};
+
+/* ---- Cierre ---- */
+S["t-ok"] = {type:"done", title:"¡Perfecto!"};
+S["t-help"] = {type:"help", title:"¿A quién pregunto?",
+  lead:"No pasa nada. Hay cosas que se arreglan más rápido con alguien al lado.",
+  extraHtml:
+    '<h2>Si el problema es de tu cuenta</h2>'+
+    '<p>Si no te deja iniciar sesión o has olvidado la contraseña de la cuenta de la universidad, hay que preguntar al servicio de informática de la universidad. En la UAM, el CAU: <b>cau@uam.es</b>.</p>'+
+    '<h2>Ayuda oficial de Microsoft</h2>'+
+    '<a class="btn block primary" href="https://support.microsoft.com/es-es/office/1613bb53-f3fa-431e-85a9-d6a91e3468c9" target="_blank" rel="noopener">Cómo unirse a una reunión (Microsoft)</a>'
+};

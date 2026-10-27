@@ -1,8 +1,8 @@
 {
-  "name": "impresora-ayuda",
-  "version": "0.1.0",
+  "name": "ayuda-paso-a-paso",
+  "version": "0.2.0",
   "private": true,
-  "description": "Ayuda paso a paso para la impresora Epson XP-2200 (web estática)",
+  "description": "Guías paso a paso en español: impresora Epson XP-2200 y videollamadas con Microsoft Teams (web estática)",
   "scripts": {
     "dev": "npx --yes serve . -l 3000"
   }
