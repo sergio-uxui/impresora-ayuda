@@ -12,6 +12,8 @@ Pensada para usarla con letra grande, leer en voz alta y modo oscuro.
 ```
 index.html        Estructura de la página (y los iconos)
 favicon.svg       Icono de la pestaña (la mano del logotipo)
+icons/            Iconos PNG para el móvil (pantalla de inicio de iPhone y Android)
+manifest.webmanifest  Nombre e icono cuando se guarda como app
 css/styles.css    Estilos (colores en :root, modo oscuro incluido)
 js/data.js        CONTENIDO: todas las pantallas (objeto S), contacto (CONTACT) y secciones (SECTIONS)
 js/app.js         Lógica: navegación, secciones, luces de la impresora, barra de Teams, voz, tamaño de letra
