@@ -76,13 +76,29 @@ header{
 .brand .mark{flex:none;width:2rem;height:2rem;border-radius:9px;background:var(--brand);color:var(--brand-ink);display:flex;align-items:center;justify-content:center}
 .brand .mark svg{width:1.15rem;height:1.15rem}
 .brand b{display:block;font-family:var(--serif);font-weight:600;font-size:1.1rem}
-.sizes{display:flex;gap:4px;flex:none;padding:3px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
-.sizes button{
+.sizes{position:relative;flex:none}
+.sizes-toggle{display:none}
+.sizes-list{display:flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.sizes-list button{
   font:inherit;font-weight:700;min-width:2.5rem;height:2.5rem;border-radius:9px;cursor:pointer;
   background:transparent;color:var(--muted);border:0;
 }
-.sizes button:hover{color:var(--ink)}
-.sizes button[aria-pressed="true"]{background:var(--btn);color:var(--btn-ink)}
+.sizes-list button:hover{color:var(--ink)}
+.sizes-list button[aria-pressed="true"]{background:var(--btn);color:var(--btn-ink)}
+
+/* Móvil: botón de voz solo con icono y tamaño de letra desplegable */
+@media (max-width:40em){
+  .toprow .say{min-width:2.6rem;padding-inline:.6rem;gap:0}
+  .say .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .sizes-toggle{
+    display:flex;align-items:center;justify-content:center;width:2.75rem;height:2.75rem;border-radius:12px;cursor:pointer;
+    font:inherit;font-weight:700;font-size:1.1rem;background:var(--surface);color:var(--ink);border:1px solid var(--line);
+  }
+  .sizes.open .sizes-toggle{border-color:var(--ink)}
+  .sizes-list{display:none;position:absolute;right:0;top:calc(100% + 6px);z-index:30;flex-direction:column;box-shadow:var(--shadow)}
+  .sizes.open .sizes-list{display:flex}
+  .sizes-list button{min-width:3rem;height:3rem}
+}
 
 main{padding:18px 0 48px;outline:none}
 h1:focus,h1:focus-visible{outline:none}

@@ -68,7 +68,7 @@ function navRow(id){
     h += '<a class="btn" href="#/">🏠 Inicio</a>';
   }
   if("speechSynthesis" in window){
-    h += '<button class="btn" type="button" id="say" aria-pressed="false">🔊 Leer en voz alta</button>';
+    h += '<button class="btn say" type="button" id="say" aria-pressed="false">'+sayLabel(false)+'</button>';
   }
   return h;
 }
@@ -386,12 +386,15 @@ function render(){
   if(h1){ h1.setAttribute("tabindex","-1"); h1.focus({preventScroll:true}); }
 }
 
-/* Leer en voz alta */
+/* Leer en voz alta. En el móvil el botón muestra solo el icono; el texto queda para los lectores de pantalla */
+function sayLabel(on){
+  return '<span aria-hidden="true">'+(on?"⏹":"🔊")+'</span><span class="lbl">'+(on?"Parar la lectura":"Leer en voz alta")+'</span>';
+}
 var speaking = false;
 function stopSpeech(){
   if("speechSynthesis" in window){ try{ speechSynthesis.cancel(); }catch(e){} }
   speaking = false;
-  var b = document.getElementById("say"); if(b){ b.setAttribute("aria-pressed","false"); b.textContent = "🔊 Leer en voz alta"; }
+  var b = document.getElementById("say"); if(b){ b.setAttribute("aria-pressed","false"); b.innerHTML = sayLabel(false); }
 }
 function toggleSpeech(){
   if(speaking){ stopSpeech(); return; }
@@ -401,17 +404,33 @@ function toggleSpeech(){
   u.lang = "es-ES"; u.rate = 0.92;
   u.onend = u.onerror = stopSpeech;
   speaking = true;
-  var b = document.getElementById("say"); if(b){ b.setAttribute("aria-pressed","true"); b.textContent = "⏹ Parar la lectura"; }
+  var b = document.getElementById("say"); if(b){ b.setAttribute("aria-pressed","true"); b.innerHTML = sayLabel(true); }
   speechSynthesis.speak(u);
 }
 
 /* Tamaño de letra */
 function setFs(n){
   document.documentElement.setAttribute("data-fs", String(n));
-  document.querySelectorAll(".sizes button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.fs === String(n))); });
+  document.querySelectorAll(".sizes-list button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.fs === String(n))); });
   try{ localStorage.setItem("fs", String(n)); }catch(e){}
 }
-document.querySelectorAll(".sizes button").forEach(function(b){ b.addEventListener("click", function(){ setFs(b.dataset.fs); }); });
+document.querySelectorAll(".sizes-list button").forEach(function(b){ b.addEventListener("click", function(){ setFs(b.dataset.fs); closeSizes(true); }); });
+
+/* En el móvil el tamaño de letra es un solo botón "A" que despliega las tres opciones */
+var sizes = document.querySelector(".sizes"), sizesToggle = document.querySelector(".sizes-toggle");
+function closeSizes(focus){
+  if(!sizes.classList.contains("open")) return;
+  sizes.classList.remove("open");
+  sizesToggle.setAttribute("aria-expanded","false");
+  if(focus && getComputedStyle(sizesToggle).display !== "none") sizesToggle.focus();
+}
+sizesToggle.addEventListener("click", function(){
+  var open = sizes.classList.toggle("open");
+  sizesToggle.setAttribute("aria-expanded", String(open));
+  if(open) sizes.querySelector('.sizes-list [aria-pressed="true"]').focus();
+});
+document.addEventListener("click", function(e){ if(!sizes.contains(e.target)) closeSizes(); });
+document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeSizes(true); });
 var saved = "0"; try{ saved = localStorage.getItem("fs") || "0"; }catch(e){}
 setFs(saved);
 
