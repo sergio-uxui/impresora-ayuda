@@ -60,15 +60,12 @@ function crumbs(id){
   return '<nav aria-label="Estás aquí"><ol class="crumbs">'+c.join("")+'</ol></nav>';
 }
 
-/* Botones Volver, Inicio y Leer en voz alta (van en la cabecera) */
+/* Botones Volver e Inicio (van en la cabecera) */
 function navRow(id){
   var h = "";
   if(id !== "home"){
     h += '<button class="btn" type="button" id="back">← Volver</button>';
     h += '<a class="btn" href="#/">🏠 Inicio</a>';
-  }
-  if("speechSynthesis" in window){
-    h += '<button class="btn say" type="button" id="say" aria-pressed="false">'+sayLabel(false)+'</button>';
   }
   return h;
 }
@@ -366,12 +363,11 @@ function render(){
   }
   stopSpeech();
   document.getElementById("pagenav").innerHTML = navRow(id);
+  placeSay();
   main.innerHTML = crumbs(id) + '<div id="readable">' + h + "</div>";
   document.title = (id==="home" ? SITE.title : s.title.replace(/<[^>]+>/g,"") + " · " + SITE.title);
   var back = document.getElementById("back");
   if(back) back.addEventListener("click", function(){ if(navCount>0) history.back(); else location.hash="#/"; });
-  var say = document.getElementById("say");
-  if(say) say.addEventListener("click", toggleSpeech);
   bindTabs();
   main.querySelectorAll(".demo-toggle").forEach(function(t){
     t.addEventListener("click", function(){
@@ -407,6 +403,20 @@ function toggleSpeech(){
   var b = document.getElementById("say"); if(b){ b.setAttribute("aria-pressed","true"); b.innerHTML = sayLabel(true); }
   speechSynthesis.speak(u);
 }
+
+/* Botón de leer en voz alta: se crea una vez. En el móvil va a la derecha del tamaño de letra; si no, junto a Volver e Inicio */
+var sayBtn = null, mobile = window.matchMedia("(max-width:40em)");
+if("speechSynthesis" in window){
+  sayBtn = document.createElement("button");
+  sayBtn.type = "button"; sayBtn.className = "btn say"; sayBtn.id = "say";
+  sayBtn.setAttribute("aria-pressed","false");
+  sayBtn.innerHTML = sayLabel(false);
+  sayBtn.addEventListener("click", toggleSpeech);
+}
+function placeSay(){
+  if(sayBtn) document.getElementById(mobile.matches ? "sayslot" : "pagenav").appendChild(sayBtn);
+}
+if(mobile.addEventListener) mobile.addEventListener("change", placeSay);
 
 /* Tamaño de letra */
 function setFs(n){
