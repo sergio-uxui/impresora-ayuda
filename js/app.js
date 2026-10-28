@@ -10,6 +10,7 @@ var navCount = 0;
 function secOf(id){
   if(id === "home") return "hub";
   if(id === "teams" || id.indexOf("t-") === 0) return "teams";
+  if(id === "citibox" || id.indexOf("c-") === 0) return "citibox";
   return "printer";
 }
 var SEC = SECTIONS.hub;
@@ -189,7 +190,55 @@ function demoJoinWait(){
     '<div class="j-in"><div class="d-avatar">S</div><span class="j-badge">Ya estás dentro</span></div>',
     dNote("Espera sin cerrar nada: te dejarán pasar."));
 }
-var DEMOS = {"share-btn": demoShareBtn, "share-pick": demoSharePick, "share-sound": demoShareSound, "share-border": demoShareBorder, "share-stop": demoShareStop, "join-link": demoJoinLink, "join-open": demoJoinOpen, "join-login": demoJoinLogin, "join-prejoin": demoJoinPrejoin, "join-wait": demoJoinWait};
+/* Citibox: una animación por paso. "B3" es un buzón de ejemplo */
+var C_TAP = '<span class="c-tap"></span>';
+function cPhone(cls, inner){ return '<div class="c-phone '+cls+'"><div class="c-scr">'+inner+'</div></div>'; }
+function cLockers(){
+  var doors = "";
+  ["A1","A2","A3","A4","B1","B2","B3","B4","C1","C2","C3","C4"].forEach(function(n){
+    doors += '<i'+(n==="B3"?' class="me"':'')+'><b>'+n+'</b></i>';
+  });
+  return '<div class="c-lockers"><span class="c-brand">citibox</span><div class="c-doors">'+doors+'</div></div>';
+}
+function demoCbNotice(){
+  return demoFig("mini dc1",
+    cPhone("", '<span class="c-time">10:24</span><span class="c-date">martes, 28 de octubre</span>' +
+      '<div class="c-noti"><span class="c-app"><i class="c-logo">c</i>CITIBOX · ahora</span>' +
+      '<b>Tu paquete ha llegado</b>Está en el buzón <em>B3</em> de tu portal.</div>'),
+    dNote("El aviso te dice en qué buzón está el paquete."));
+}
+function demoCbGo(){
+  return demoFig("mini dc2",
+    cLockers() + cPhone("walk", '<div class="c-bar">Citibox</div><div class="c-big"><small>Tu paquete está en</small>B3</div>'),
+    dNote("Baja al portal con el móvil y busca el buzón."));
+}
+function demoCbScan(){
+  return demoFig("mini dc3",
+    cPhone("", '<div class="c-bar">Mis pedidos</div>' +
+      '<div class="c-card"><span>📦</span><b>Paquete</b><small>Buzón B3 · Recoger ›</small></div>' +
+      '<div class="c-cam"><p>Escanea el QR de la cerradura</p><div class="c-qr"><i></i></div><small>o escribe la letra del buzón</small>' +
+      '<span class="c-ok">✓ Buzón B3</span></div>' + C_TAP),
+    dNote("Elige el pedido y escanea el QR de la cerradura."));
+}
+function demoCbCode(){
+  var keys = ["1","2","3","4","5","6","7","8","9","*","0","🔑"];
+  return demoFig("mini dc4",
+    cPhone("left", '<div class="c-bar">Código de apertura</div><div class="c-code">4827</div><small class="c-hint">Teclea el código y pulsa la llave</small>') +
+    '<div class="c-pad"><span class="c-led"></span><div class="c-keys">' +
+      keys.map(function(k,i){ return '<i class="k'+(k==="🔑"?"key":k)+'">'+k+'</i>'; }).join("") +
+    '</div></div>',
+    dNote("Teclea el código y pulsa la **llave**: la luz se pone verde."));
+}
+function demoCbOpen(){
+  return demoFig("mini dc5",
+    '<div class="c-row"><i class="c-cell"></i>' +
+      '<div class="c-cell c-mine"><div class="c-inside"><span class="c-pkg"></span></div><div class="c-door"><span class="c-led on"></span><b>B3</b></div></div>' +
+    '<i class="c-cell"></i></div>' +
+    '<div class="j-toast">¡Listo! Cierra bien la puerta</div>',
+    dNote("Abre la puerta, saca el paquete y ciérrala bien."));
+}
+
+var DEMOS = {"cb-notice": demoCbNotice, "cb-go": demoCbGo, "cb-scan": demoCbScan, "cb-code": demoCbCode, "cb-open": demoCbOpen, "share-btn": demoShareBtn, "share-pick": demoSharePick, "share-sound": demoShareSound, "share-border": demoShareBorder, "share-stop": demoShareStop, "join-link": demoJoinLink, "join-open": demoJoinOpen, "join-login": demoJoinLogin, "join-prejoin": demoJoinPrejoin, "join-wait": demoJoinWait};
 
 function renderBlock(b){
   switch(b.k){
@@ -215,6 +264,10 @@ function renderBlock(b){
     case "btns":
       return b.items.map(function(x){return '<a class="btn block" href="#/'+x.to+'">'+esc(x.label)+"</a>"}).join("");
     case "toolbar": return toolbar();
+    case "video":
+      return '<figure class="video"><button type="button" class="video-play" data-yt="'+esc(b.yt)+'" aria-label="Ver el vídeo: '+esc(b.t)+'">' +
+        '<img src="https://i.ytimg.com/vi/'+esc(b.yt)+'/hqdefault.jpg" alt="" loading="lazy"><span class="video-btn" aria-hidden="true">▶</span></button>' +
+        '<figcaption>🎬 '+esc(b.t)+' <span>(YouTube)</span></figcaption></figure>';
     case "demo": return DEMOS[b.v] ? DEMOS[b.v]() : "";
   }
   return "";
@@ -369,6 +422,18 @@ function render(){
   var back = document.getElementById("back");
   if(back) back.addEventListener("click", function(){ if(navCount>0) history.back(); else location.hash="#/"; });
   bindTabs();
+  /* El vídeo de YouTube solo se carga al pulsar */
+  main.querySelectorAll(".video-play").forEach(function(v){
+    v.addEventListener("click", function(){
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/"+v.dataset.yt+"?autoplay=1&rel=0";
+      f.title = v.getAttribute("aria-label");
+      f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      f.allowFullscreen = true;
+      v.replaceWith(f);
+      f.focus();
+    });
+  });
   main.querySelectorAll(".demo-toggle").forEach(function(t){
     t.addEventListener("click", function(){
       var paused = t.closest(".demo").classList.toggle("paused");

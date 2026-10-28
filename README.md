@@ -4,6 +4,7 @@ Web estática, sin dependencias ni paso de compilación. Una sola página con va
 
 - **La impresora** (Epson XP-2200): luces, papel, tinta, calidad de impresión, Wi-Fi y cómo hacer cosas. Fuente: Guía del usuario NPD6908-02.
 - **Videollamadas con Teams**: entrar a una clase, probar cámara y sonido, compartir pantalla y qué hacer si algo falla. Fuente: Microsoft Soporte y guías de universidades.
+- **Paquetes en Citibox**: recoger un paquete de los buzones inteligentes del portal, paso a paso y con animaciones. Las pantallas llevan el prefijo `c-`.
 
 Pensada para usarla con letra grande, leer en voz alta y modo oscuro.
 
@@ -28,10 +29,10 @@ js/app.js         Lógica: navegación, secciones, luces de la impresora, barra 
 
 - Teléfono de contacto: `CONTACT` al inicio de `js/data.js`.
 - Cada pantalla es una entrada de `S`. La de inicio es `S.home`; cada guía tiene su entrada (`S.printer`, `S["teams"]`).
-- Las pantallas de **Teams** llevan el prefijo `t-` (`t-join`, `t-share`…). Las de la impresora no.
+- Las pantallas de **Teams** llevan el prefijo `t-` (`t-join`, `t-share`…) y las de **Citibox**, `c-`. Las de la impresora no.
 - Una pantalla pertenece a una sección según su identificador (ver `secOf` en `js/app.js`). `SECTIONS` define, para cada una, su nombre en las migas, el pie y adónde llevan “Sí, ya funciona” y “Volver al inicio”.
 - Tipos de pantalla: `menu`, `cards`, `guide`, `panel`, `done`, `help`.
-- Bloques de una guía (`blocks`): `p`, `warn`, `tip`, `steps`, `list`, `cases`, `acc`, `btns`, `toolbar` y `demo`.
+- Bloques de una guía (`blocks`): `p`, `warn`, `tip`, `steps`, `list`, `cases`, `acc`, `btns`, `toolbar`, `demo` y `video` (vídeo de YouTube que solo se carga al pulsar: `{k:"video", yt:"<id>", t:"título"}`).
 - `demo` es una animación en bucle (como un GIF) que repite una acción: `{k:"demo", v:"<nombre en DEMOS>"}`. Se dibuja con HTML y CSS en `DEMOS` (`js/app.js`); tiene botón de pausa y, con movimiento reducido, muestra una imagen fija.
 - Un paso también puede llevar su propia animación debajo: `{t:"…", demo:"join-link"}` (ver "Entrar con el enlace" y "Compartir pantalla").
 - Texto: `**negrita**` y enlaces internos con `[[id-de-pantalla|texto]]`.

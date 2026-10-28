@@ -19,7 +19,9 @@ var SECTIONS = {
   printer: {label:"Impresora", home:"printer", ok:"ok", help:"help", srcPrefix:"Guía del usuario Epson XP-2200, ",
             foot:"Guía no oficial basada en la Guía del usuario de la Epson XP-2200 (NPD6908-02). Las ilustraciones son propias; el panel real puede verse algo distinto."},
   teams:   {label:"Videollamadas", home:"teams", ok:"t-ok", help:"t-help", srcPrefix:"",
-            foot:"Guía no oficial, basada en las páginas de ayuda de Microsoft y de varias universidades. Teams cambia a menudo: si un botón no está donde se dice, busca su icono."}
+            foot:"Guía no oficial, basada en las páginas de ayuda de Microsoft y de varias universidades. Teams cambia a menudo: si un botón no está donde se dice, busca su icono."},
+  citibox: {label:"Citibox", home:"citibox", ok:"c-ok", help:"c-help", srcPrefix:"",
+            foot:"Guía no oficial sobre los buzones inteligentes Citibox. Las ilustraciones son propias; la app y la cerradura pueden verse algo distintas según el modelo."}
 };
 
 /* ========= DATOS ========= */
@@ -30,7 +32,8 @@ S.home = {type:"menu", title:"¿En qué te ayudo?",
   intro:"Elige la guía que necesitas.",
   items:[
     {ic:"🖨️", t:"La impresora", sub:"Epson XP-2200: luces, papel, tinta, Wi-Fi…", to:"printer"},
-    {ic:"🎥", t:"Videollamadas con Teams", sub:"Entrar a una clase, compartir pantalla…", to:"teams"}
+    {ic:"🎥", t:"Videollamadas con Teams", sub:"Entrar a una clase, compartir pantalla…", to:"teams"},
+    {ic:"📦", t:"Paquetes en Citibox", sub:"Recoger un paquete del buzón del portal", to:"citibox"}
   ]
 };
 
@@ -740,4 +743,32 @@ S["t-help"] = {type:"help", title:"¿A quién pregunto?",
     '<p>Si no te deja iniciar sesión o has olvidado la contraseña de la cuenta de la universidad, hay que preguntar al servicio de informática de la universidad. En la UAM, el CAU: <b>cau@uam.es</b>.</p>'+
     '<h2>Ayuda oficial de Microsoft</h2>'+
     '<a class="btn block primary" href="https://support.microsoft.com/es-es/office/1613bb53-f3fa-431e-85a9-d6a91e3468c9" target="_blank" rel="noopener">Cómo unirse a una reunión (Microsoft)</a>'
+};
+
+
+
+/* ################ CITIBOX ################ */
+/* Pantallas con prefijo "c-" y la entrada "citibox". */
+S.citibox = {type:"guide", title:"Recoger un paquete de Citibox",
+  lead:"Los buzones inteligentes de Citibox están en el portal o en la zona común del edificio. Cuando te llega un paquete, el buzón se abre con un código que te da la app del móvil.",
+  blocks:[
+    {k:"steps", items:[
+      {t:"**Llega el aviso.** Cuando el repartidor deja tu pedido en el buzón, te llega una notificación de la app **Citibox** en el móvil.", n:"En el aviso verás el **número del buzón** donde está guardado tu paquete.", demo:"cb-notice"},
+      {t:"**Baja a los buzones** de tu edificio o comunidad. Lleva el móvil con la app de Citibox abierta.", demo:"cb-go"},
+      {t:"Delante del buzón, abre la app y **elige el pedido** que vas a recoger. Sigue las instrucciones de la pantalla.", n:"Puedes **escanear el código QR** de la cerradura o escribir la **primera letra o número** que aparece en la etiqueta del buzón.", demo:"cb-scan"},
+      {t:"La app te da un **código de apertura**. Escríbelo en el teclado de la puerta del buzón y pulsa la tecla de la **llave**.", n:"La luz cambia de color para confirmar. En algunos modelos de cerradura la app se conecta sin cables y no hace falta teclear el código.", demo:"cb-code"},
+      {t:"**La puerta se abre.** Tira de ella, saca tu paquete y **cierra bien la puerta**. ¡Listo!", demo:"cb-open"}
+    ]},
+    {k:"tip", h:"Antes de bajar", t:"Apunta o recuerda el **número del buzón** que sale en el aviso, y lleva el móvil contigo: el buzón se abre con la app."},
+    {k:"video", yt:"D5UXEkdyxVU", t:"Citibox, la llave de tu nuevo buzón inteligente"},
+    {k:"btns", items:[{label:"El buzón no se abre", to:"c-help"}]}
+  ], src:"vídeo “Citibox, la llave de tu nuevo buzón inteligente” (YouTube)"};
+
+S["c-ok"] = {type:"done", title:"¡Paquete recogido!"};
+S["c-help"] = {type:"help", title:"Si el buzón no se abre",
+  lead:"Vuelve a intentarlo despacio: elige otra vez el pedido en la app y teclea el código de nuevo. Si sigue sin abrirse, pide ayuda.",
+  extraHtml:
+    '<h2>Ayuda de Citibox</h2>'+
+    '<p>El servicio de atención de Citibox puede ayudarte con el buzón y con tu pedido.</p>'+
+    '<a class="btn block primary" href="https://www.citibox.com/" target="_blank" rel="noopener">Web de Citibox</a>'
 };
