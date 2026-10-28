@@ -218,7 +218,18 @@ function demoCbScan(){
       '<div class="c-card"><span>📦</span><b>Paquete</b><small>Buzón B3 · Recoger ›</small></div>' +
       '<div class="c-cam"><p>Escanea el QR de la cerradura</p><div class="c-qr"><i></i></div><small>o escribe la letra del buzón</small>' +
       '<span class="c-ok">✓ Buzón B3</span></div>' + C_TAP),
-    dNote("Elige el pedido y escanea el QR de la cerradura."));
+    dNote("**Opción 1:** elige el pedido y escanea el QR de la cerradura."));
+}
+function demoCbLetter(){
+  var row = ["A","B","C","D","1","2","3"];
+  return demoFig("mini dc6",
+    cPhone("left", '<div class="c-bar">Identifica el buzón</div>' +
+      '<p class="c-ask">Escribe la primera letra o número de la etiqueta</p>' +
+      '<div class="c-field"><span class="c-typed">B</span><i class="c-caret"></i></div>' +
+      '<span class="c-ok">✓ Buzón B3</span>' +
+      '<div class="c-kb">'+row.map(function(k){ return '<i'+(k==="B"?' class="kb"':'')+'>'+k+'</i>'; }).join("")+'</div>') +
+    '<div class="c-label-door"><span class="c-led"></span><div class="c-label"><b>B</b>3</div><small>Etiqueta del buzón</small></div>',
+    dNote("**Opción 2:** escribe la primera letra o número de la etiqueta."));
 }
 function demoCbCode(){
   var keys = ["1","2","3","4","5","6","7","8","9","*","0","🔑"];
@@ -238,7 +249,7 @@ function demoCbOpen(){
     dNote("Abre la puerta, saca el paquete y ciérrala bien."));
 }
 
-var DEMOS = {"cb-notice": demoCbNotice, "cb-go": demoCbGo, "cb-scan": demoCbScan, "cb-code": demoCbCode, "cb-open": demoCbOpen, "share-btn": demoShareBtn, "share-pick": demoSharePick, "share-sound": demoShareSound, "share-border": demoShareBorder, "share-stop": demoShareStop, "join-link": demoJoinLink, "join-open": demoJoinOpen, "join-login": demoJoinLogin, "join-prejoin": demoJoinPrejoin, "join-wait": demoJoinWait};
+var DEMOS = {"cb-notice": demoCbNotice, "cb-go": demoCbGo, "cb-scan": demoCbScan, "cb-letter": demoCbLetter, "cb-code": demoCbCode, "cb-open": demoCbOpen, "share-btn": demoShareBtn, "share-pick": demoSharePick, "share-sound": demoShareSound, "share-border": demoShareBorder, "share-stop": demoShareStop, "join-link": demoJoinLink, "join-open": demoJoinOpen, "join-login": demoJoinLogin, "join-prejoin": demoJoinPrejoin, "join-wait": demoJoinWait};
 
 function renderBlock(b){
   switch(b.k){
@@ -248,7 +259,7 @@ function renderBlock(b){
     case "steps":
       return (b.h?"<h2>"+fmt(b.h)+"</h2>":"") + '<ol class="steps">' + b.items.map(function(it){
         if(typeof it === "string") return "<li>"+fmt(it)+"</li>";
-        return "<li>"+fmt(it.t)+(it.n?'<span class="stepnote">'+fmt(it.n)+"</span>":"")+(it.demo && DEMOS[it.demo]?DEMOS[it.demo]():"")+"</li>";
+        return "<li>"+fmt(it.t)+(it.n?'<span class="stepnote">'+fmt(it.n)+"</span>":"")+[].concat(it.demo||[]).map(function(d){ return DEMOS[d]?DEMOS[d]():""; }).join("")+"</li>";
       }).join("") + "</ol>";
     case "list":
       return (b.h?"<h2>"+fmt(b.h)+"</h2>":"") + '<ul class="list">'+b.items.map(function(x){return "<li>"+fmt(x)+"</li>"}).join("")+"</ul>";

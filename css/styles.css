@@ -425,7 +425,7 @@ details.acc .accb{padding:0 1.1rem .9rem}
 @keyframes ds5-cur{0%,12%{left:70%;top:65%}30%{left:62%;top:20%}45%,100%{left:61%;top:14%}}
 
 /* Citibox */
-.dc1 .demo-screen,.dc2 .demo-screen,.dc3 .demo-screen,.dc4 .demo-screen,.dc5 .demo-screen{background:#ebe6dc;color:#1b1c24}
+.dc1 .demo-screen,.dc2 .demo-screen,.dc3 .demo-screen,.dc4 .demo-screen,.dc5 .demo-screen,.dc6 .demo-screen{background:#ebe6dc;color:#1b1c24}
 .c-phone{position:absolute;top:5%;bottom:5%;left:50%;aspect-ratio:9/18;transform:translateX(-50%);background:#141413;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .c-phone.left{left:12%;transform:none}
 .c-scr{position:absolute;inset:2.5%;border-radius:11px;overflow:hidden;background:#fff;display:flex;flex-direction:column;font-size:.82em}
@@ -474,6 +474,25 @@ details.acc .accb{padding:0 1.1rem .9rem}
 @keyframes c-okin{0%,72%{opacity:0}76%,100%{opacity:1}}
 .dc3 .c-tap{animation-name:c-tap3}
 @keyframes c-tap3{0%,18%{opacity:0;left:62%;top:70%;transform:scale(1)}26%{opacity:1;left:50%;top:24%;transform:scale(1)}30%{transform:scale(.7)}34%{opacity:1;transform:scale(1)}38%,100%{opacity:0;left:50%;top:24%}}
+
+/* 3b. Escribir la letra de la etiqueta */
+.c-ask{margin:12% 8% 6%;font-size:.85em;text-align:center;color:#3d3d3a;line-height:1.3}
+.c-field{margin:0 14%;border:2px solid #e8532b;border-radius:6px;height:2.2em;display:flex;align-items:center;justify-content:center;gap:2px;font-size:1.2em;font-weight:700}
+.c-typed{opacity:0;animation-name:c-typed}
+.c-caret{width:2px;height:1.1em;background:#e8532b;animation-name:c-caret}
+@keyframes c-typed{0%,44%{opacity:0}46%,100%{opacity:1}}
+@keyframes c-caret{0%,20%,40%,60%,80%{opacity:1}10%,30%,50%,70%,90%,100%{opacity:0}}
+.dc6 .c-ok{animation-name:c-okin;color:#fff;text-align:center;bottom:30%}
+.c-kb{position:absolute;left:0;right:0;bottom:0;background:#e3e1db;padding:4% 3%;display:grid;grid-template-columns:repeat(7,1fr);gap:3%}
+.c-kb i{font-style:normal;font-weight:700;text-align:center;background:#fff;border-radius:3px;padding:.35em 0;font-size:.85em}
+.c-kb .kb{animation-name:c-kb}
+@keyframes c-kb{0%,38%,48%,100%{background:#fff;color:inherit}40%,46%{background:#e8532b;color:#fff}}
+.c-label-door{position:absolute;left:50%;right:10%;top:8%;bottom:8%;background:#f6f3ec;border:1px solid #c2bba9;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7%}
+.c-label-door .c-led{width:8%;animation-name:none}
+.c-label{background:#fff;border:2px dashed #8c8676;border-radius:6px;padding:.3em .8em;font-size:2em;font-weight:700;color:#6b6659}
+.c-label b{color:#e8532b;border-radius:4px;padding:0 .1em;animation-name:c-lbl}
+@keyframes c-lbl{0%,15%{background:transparent}22%,100%{background:#fde9e1}}
+.c-label-door small{color:#6b6659;font-size:.8em}
 
 /* 4. El código y el teclado */
 .demo.mini.dc4 .demo-screen{--dur:8s}

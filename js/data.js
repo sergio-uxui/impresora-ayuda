@@ -755,7 +755,7 @@ S.citibox = {type:"guide", title:"Recoger un paquete de Citibox",
     {k:"steps", items:[
       {t:"**Llega el aviso.** Cuando el repartidor deja tu pedido en el buzón, te llega una notificación de la app **Citibox** en el móvil.", n:"En el aviso verás el **número del buzón** donde está guardado tu paquete.", demo:"cb-notice"},
       {t:"**Baja a los buzones** de tu edificio o comunidad. Lleva el móvil con la app de Citibox abierta.", demo:"cb-go"},
-      {t:"Delante del buzón, abre la app y **elige el pedido** que vas a recoger. Sigue las instrucciones de la pantalla.", n:"Puedes **escanear el código QR** de la cerradura o escribir la **primera letra o número** que aparece en la etiqueta del buzón.", demo:"cb-scan"},
+      {t:"Delante del buzón, abre la app y **elige el pedido** que vas a recoger. Después la app te pide identificar el buzón. Puedes hacerlo de dos formas:", n:"**Opción 1:** escanear el **código QR** de la cerradura con la cámara. **Opción 2:** escribir la **primera letra o número** que aparece en la etiqueta del buzón.", demo:["cb-scan","cb-letter"]},
       {t:"La app te da un **código de apertura**. Escríbelo en el teclado de la puerta del buzón y pulsa la tecla de la **llave**.", n:"La luz cambia de color para confirmar. En algunos modelos de cerradura la app se conecta sin cables y no hace falta teclear el código.", demo:"cb-code"},
       {t:"**La puerta se abre.** Tira de ella, saca tu paquete y **cierra bien la puerta**. ¡Listo!", demo:"cb-open"}
     ]},
