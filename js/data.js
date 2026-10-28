@@ -53,44 +53,38 @@ S.printer = {type:"menu", title:"¿Qué le pasa a la impresora?",
 };
 
 /* ---- Luces ---- */
-S.lights = {type:"menu", title:"¿Qué luz te llama la atención?",
-  intro:"Mira los botones de la parte delantera de la impresora. Elige la luz que está encendida o parpadeando.",
-  items:[
-    {ic:"💧", t:"La luz de la tinta (la gota)", to:"lights-ink"},
-    {ic:"📄", t:"La luz del papel (la hoja)", to:"lights-paper"},
-    {ic:"💧📄", t:"La gota y la hoja a la vez", to:"lights-both"},
-    {ic:"📶", t:"Las luces de Wi-Fi", to:"lights-wifi"},
-    {ic:"⏻", t:"Solo la luz de encendido", to:"lights-power"},
-    {ic:"⚠️", t:"Casi todas las luces a la vez", to:"lights-many"}
+var CARDS_HINT = "En el dibujo, las luces apagadas o muy claras no importan. Fíjate solo en las que tienen color y texto debajo.";
+S.lights = {type:"cards", title:"¿Qué luz te llama la atención?",
+  intro:"Mira los botones de la parte delantera de la impresora. Elige arriba la luz que está encendida o parpadeando.", tabsLabel:"Luz",
+  tabs:[
+  {id:"ink", ic:"💧", label:"Tinta", intro:CARDS_HINT, cards:[
+    {lamps:{ink:"on"}, t:"La luz de la tinta está fija", d:"Un cartucho se ha acabado, falta o no se reconoce.", to:"g-ink-on"},
+    {lamps:{ink:"blink"}, t:"La luz de la tinta parpadea", d:"Un cartucho se está acabando. Aún puedes imprimir.", to:"g-ink-low"}
+  ]},
+  {id:"paper", ic:"📄", label:"Papel", intro:CARDS_HINT, cards:[
+    {lamps:{paper:"on"}, t:"La luz del papel está fija", d:"No hay papel o han entrado varias hojas a la vez.", to:"g-nopaper"},
+    {lamps:{paper:"slow"}, t:"Parpadea despacio", d:"Hay un atasco de papel.", to:"g-jam"},
+    {lamps:{paper:"fast"}, t:"Parpadea rápido", d:"Ha quedado papel dentro de la impresora.", to:"g-paper-inside"}
+  ]},
+  {id:"both", ic:"💧📄", label:"Tinta y papel", intro:CARDS_HINT, cards:[
+    {lamps:{ink:"on",paper:"on"}, t:"Las dos fijas", d:"La impresora se apagó de forma incorrecta.", to:"g-bad-off"},
+    {lamps:{ink:"blink",paper:"blink"}, t:"Las dos parpadean a la vez", d:"Una pieza interior que recoge tinta sobrante está casi llena.", to:"g-pad"},
+    {lamps:{ink:"blink",paper:"alt"}, t:"Parpadean una y otra, alternando", d:"La pieza que recoge tinta al imprimir sin márgenes está casi llena.", to:"g-pad-borderless"}
+  ]},
+  {id:"wifi", ic:"📶", label:"Wi-Fi", intro:CARDS_HINT, cards:[
+    {lamps:{wifi:"blink",direct:"blink"}, t:"Las dos luces de Wi-Fi parpadean", d:"Hay un error de conexión Wi-Fi.", to:"g-wifi-error"},
+    {lamps:{wifi:"on"}, t:"Una luz de Wi-Fi fija, sin parpadeos", d:"Todo bien: la impresora está conectada.", to:"g-ok"}
+  ]},
+  {id:"power", ic:"⏻", label:"Encendido", intro:CARDS_HINT, cards:[
+    {lamps:{power:"blink"}, t:"La luz de encendido parpadea", d:"La impresora está trabajando. Hay que esperar.", to:"g-working"}
+  ]},
+  {id:"many", ic:"⚠️", label:"Casi todas", intro:CARDS_HINT, cards:[
+    {lamps:{wifi:"on",direct:"on",ink:"on",paper:"on"}, t:"Las dos de Wi-Fi, la gota y la hoja, todas fijas", d:"La impresora arrancó en modo de recuperación.", to:"g-recovery"},
+    {lamps:{power:"blink",wifi:"blink",direct:"blink",ink:"blink",paper:"blink"}, t:"Todas parpadean, incluida la de encendido", d:"La impresora tiene un error interno.", to:"g-error"}
+  ]}
   ],
   extra:[{label:"Ver dónde está cada luz", to:"panel"}]
 };
-var CARDS_HINT = "En el dibujo, las luces apagadas o muy claras no importan. Fíjate solo en las que tienen color y texto debajo.";
-S["lights-ink"] = {type:"cards", title:"La luz de la tinta (la gota)", intro:CARDS_HINT, cards:[
-  {lamps:{ink:"on"}, t:"La luz de la tinta está fija", d:"Un cartucho se ha acabado, falta o no se reconoce.", to:"g-ink-on"},
-  {lamps:{ink:"blink"}, t:"La luz de la tinta parpadea", d:"Un cartucho se está acabando. Aún puedes imprimir.", to:"g-ink-low"}
-]};
-S["lights-paper"] = {type:"cards", title:"La luz del papel (la hoja)", intro:CARDS_HINT, cards:[
-  {lamps:{paper:"on"}, t:"La luz del papel está fija", d:"No hay papel o han entrado varias hojas a la vez.", to:"g-nopaper"},
-  {lamps:{paper:"slow"}, t:"Parpadea despacio", d:"Hay un atasco de papel.", to:"g-jam"},
-  {lamps:{paper:"fast"}, t:"Parpadea rápido", d:"Ha quedado papel dentro de la impresora.", to:"g-paper-inside"}
-]};
-S["lights-both"] = {type:"cards", title:"La gota y la hoja a la vez", intro:CARDS_HINT, cards:[
-  {lamps:{ink:"on",paper:"on"}, t:"Las dos fijas", d:"La impresora se apagó de forma incorrecta.", to:"g-bad-off"},
-  {lamps:{ink:"blink",paper:"blink"}, t:"Las dos parpadean a la vez", d:"Una pieza interior que recoge tinta sobrante está casi llena.", to:"g-pad"},
-  {lamps:{ink:"blink",paper:"alt"}, t:"Parpadean una y otra, alternando", d:"La pieza que recoge tinta al imprimir sin márgenes está casi llena.", to:"g-pad-borderless"}
-]};
-S["lights-wifi"] = {type:"cards", title:"Las luces de Wi-Fi", intro:CARDS_HINT, cards:[
-  {lamps:{wifi:"blink",direct:"blink"}, t:"Las dos luces de Wi-Fi parpadean", d:"Hay un error de conexión Wi-Fi.", to:"g-wifi-error"},
-  {lamps:{wifi:"on"}, t:"Una luz de Wi-Fi fija, sin parpadeos", d:"Todo bien: la impresora está conectada.", to:"g-ok"}
-]};
-S["lights-power"] = {type:"cards", title:"Solo la luz de encendido", intro:CARDS_HINT, cards:[
-  {lamps:{power:"blink"}, t:"La luz de encendido parpadea", d:"La impresora está trabajando. Hay que esperar.", to:"g-working"}
-]};
-S["lights-many"] = {type:"cards", title:"Casi todas las luces a la vez", intro:CARDS_HINT, cards:[
-  {lamps:{wifi:"on",direct:"on",ink:"on",paper:"on"}, t:"Las dos de Wi-Fi, la gota y la hoja, todas fijas", d:"La impresora arrancó en modo de recuperación.", to:"g-recovery"},
-  {lamps:{power:"blink",wifi:"blink",direct:"blink",ink:"blink",paper:"blink"}, t:"Todas parpadean, incluida la de encendido", d:"La impresora tiene un error interno.", to:"g-error"}
-]};
 
 /* ---- Papel ---- */
 S.paper = {type:"menu", title:"Problema con el papel", intro:"¿Qué ocurre?", items:[
@@ -168,15 +162,10 @@ S["g-load"] = {type:"guide", title:"Cómo cargar el papel", fix:false,
 
 /* ---- Tinta ---- */
 S.ink = {type:"menu", title:"Tinta y cartuchos", intro:"¿Qué quieres hacer?", items:[
-  {ic:"🔄", t:"Cambiar un cartucho", to:"ink-replace"},
-  {ic:"💡", t:"La luz de la tinta está encendida", to:"lights-ink"},
+  {ic:"🔄", t:"Cambiar un cartucho", to:"g-replace"},
+  {ic:"💡", t:"La luz de la tinta está encendida", to:"lights/ink"},
   {ic:"🛒", t:"Qué cartuchos comprar", to:"g-ink-codes"},
   {ic:"🎨", t:"Se acabó un color y quiero seguir imprimiendo", to:"g-ink-temp"}
-]};
-S["ink-replace"] = {type:"menu", title:"Cambiar un cartucho", intro:"¿Cómo está ahora la luz de la tinta (la gota)?", items:[
-  {ic:"⚪", t:"Apagada", sub:"Cambio un cartucho antes de que se acabe", to:"g-replace-off"},
-  {ic:"🟠", t:"Fija", sub:"Un cartucho está agotado", to:"g-replace-on"},
-  {ic:"✨", t:"Parpadea", sub:"Un cartucho se está acabando", to:"g-replace-on"}
 ]};
 
 var CART_COMMON = [
@@ -191,34 +180,36 @@ var CART_END = [
 ];
 var CART_WARN = {k:"warn", h:"Importante", t:"Nunca cambies cartuchos con la impresora apagada y no muevas el carro con la mano. Tienen que estar puestos los cuatro cartuchos, o no imprimirá. Si la luz de la tinta no se apaga al terminar, saca el cartucho y vuelve a ponerlo."};
 
-S["g-replace-off"] = {type:"guide", title:"Cambiar un cartucho (luz de tinta apagada)",
+S["g-replace"] = {type:"guide", title:"Cambiar un cartucho",
+  lead:"¿Cómo está ahora la luz de la tinta (la gota)? Elige abajo; los pasos cambian un poco.", tabsLabel:"Luz de la tinta",
   blocks:[
-    {k:"p", t:"Cuidado con los dedos al abrir y cerrar el escáner. Si estás copiando, pulsa antes el botón de parar para cancelar."},
-    {k:"steps", items:[
-      "**Levanta la parte de arriba** (el escáner) con la tapa de documentos cerrada. No toques el carro de cartuchos de dentro.",
-      {t:"Mantén pulsado el **botón de parar** durante **10 segundos**. El carro de cartuchos se mueve a la posición de cambio.", n:"Para cancelar, deja los cartuchos puestos y apaga la impresora."}
-    ].concat(CART_COMMON).concat(CART_END)},
+    {k:"p", t:"Cuidado con los dedos al abrir y cerrar el escáner. Si estás copiando, pulsa antes el botón de parar para cancelar."}
+  ],
+  tabs:[
+    {id:"off", ic:"⚪", label:"Apagada", lead:"Cambio un cartucho antes de que se acabe.", blocks:[
+      {k:"steps", items:[
+        "**Levanta la parte de arriba** (el escáner) con la tapa de documentos cerrada. No toques el carro de cartuchos de dentro.",
+        {t:"Mantén pulsado el **botón de parar** durante **10 segundos**. El carro de cartuchos se mueve a la posición de cambio.", n:"Para cancelar, deja los cartuchos puestos y apaga la impresora."}
+      ].concat(CART_COMMON).concat(CART_END)}
+    ], src:"págs. 127–132"},
+    {id:"on", ic:"🟠", label:"Fija o parpadea", lamps:{ink:"on"}, lead:"Un cartucho está agotado o se está acabando.", blocks:[
+      {k:"steps", items:[
+        "**Levanta la parte de arriba** (el escáner) con la tapa de documentos cerrada. No toques el carro de cartuchos de dentro.",
+        {t:"Mueve el carro de cartuchos:", n:"Si la luz de la tinta está **fija**: pulsa una vez el botón de parar. Si **parpadea**: mantén pulsado el botón de parar 10 segundos. El carro se mueve a un punto marcado con una gota tachada, donde todavía no se pueden cambiar cartuchos."},
+        {t:"El cartucho que se ha parado en la **gota tachada** es el que hay que cambiar. Pulsa otra vez el **botón de parar** y el carro irá a la posición de cambio.", n:"Si hay más cartuchos agotados, cada vez que pulses el botón el carro irá al siguiente."}
+      ].concat(CART_COMMON).concat(CART_END)}
+    ], src:"págs. 127–128 y 132–136"}
+  ],
+  after:[
     CART_WARN,
     {k:"btns", items:[{label:"Qué cartuchos comprar", to:"g-ink-codes"}]}
-  ], src:"págs. 127–132"};
-
-S["g-replace-on"] = {type:"guide", title:"Cambiar un cartucho (luz de tinta fija o parpadeando)", lamps:{ink:"on"},
-  blocks:[
-    {k:"p", t:"Cuidado con los dedos al abrir y cerrar el escáner. Si estás copiando, pulsa antes el botón de parar para cancelar."},
-    {k:"steps", items:[
-      "**Levanta la parte de arriba** (el escáner) con la tapa de documentos cerrada. No toques el carro de cartuchos de dentro.",
-      {t:"Mueve el carro de cartuchos:", n:"Si la luz de la tinta está **fija**: pulsa una vez el botón de parar. Si **parpadea**: mantén pulsado el botón de parar 10 segundos. El carro se mueve a un punto marcado con una gota tachada, donde todavía no se pueden cambiar cartuchos."},
-      {t:"El cartucho que se ha parado en la **gota tachada** es el que hay que cambiar. Pulsa otra vez el **botón de parar** y el carro irá a la posición de cambio.", n:"Si hay más cartuchos agotados, cada vez que pulses el botón el carro irá al siguiente."}
-    ].concat(CART_COMMON).concat(CART_END)},
-    CART_WARN,
-    {k:"btns", items:[{label:"Qué cartuchos comprar", to:"g-ink-codes"}]}
-  ], src:"págs. 127–128 y 132–136"};
+  ]};
 
 S["g-ink-on"] = {type:"guide", title:"La luz de la tinta está fija", lamps:{ink:"on"}, fix:false,
   lead:"Puede haber varias causas. Busca la que más se parezca a tu caso.",
   blocks:[
     {k:"cases", items:[
-      {q:"Se ha agotado un cartucho (lo más habitual)", a:"Cámbialo por uno nuevo. La impresora pide el cambio aunque quede un poco de reserva, para proteger el cabezal.", to:"g-replace-on", toLabel:"Cómo cambiarlo"},
+      {q:"Se ha agotado un cartucho (lo más habitual)", a:"Cámbialo por uno nuevo. La impresora pide el cambio aunque quede un poco de reserva, para proteger el cabezal.", to:"g-replace/on", toLabel:"Cómo cambiarlo"},
       {q:"Falta un cartucho", a:"Pon el cartucho que falta."},
       {q:"Has puesto uno y no lo reconoce", a:"Presiona el cartucho hacia abajo con firmeza hasta que encaje."},
       {q:"El cartucho no es compatible", a:"Pon uno que admita esta impresora (mira [[g-ink-codes|qué cartuchos comprar]]). Los cartuchos que venían con la impresora no sirven como repuesto."},
@@ -233,7 +224,7 @@ S["g-ink-low"] = {type:"guide", title:"La tinta se está acabando", lamps:{ink:"
   blocks:[
     {k:"steps", items:[
       "Prepara un cartucho nuevo. Mira [[g-ink-codes|qué cartuchos comprar]].",
-      {t:"Cuando se acabe, cámbialo con la guía de [[g-replace-on|cambiar un cartucho]].", n:"Desde el ordenador puedes ver cuánta tinta queda de cada color en las opciones de impresión (“Niveles de tinta”)."}
+      {t:"Cuando se acabe, cámbialo con la guía de [[g-replace/on|cambiar un cartucho]].", n:"Desde el ordenador puedes ver cuánta tinta queda de cada color en las opciones de impresión (“Niveles de tinta”)."}
     ]}
   ], src:"págs. 21 y 62"};
 
@@ -342,7 +333,7 @@ S["g-layout"] = {type:"guide", title:"Sale cortado o mal colocado",
 /* ---- No imprime / no conecta ---- */
 S.noprint = {type:"menu", title:"No imprime o no conecta", intro:"¿Qué pasa?", items:[
   {ic:"🖨️", t:"Le doy a imprimir y no sale nada", to:"g-noprint"},
-  {ic:"📶", t:"No se conecta al Wi-Fi", to:"wifi"},
+  {ic:"📶", t:"No se conecta al Wi-Fi", to:"g-wifi"},
   {ic:"⏻", t:"No se enciende o no se apaga", to:"g-power"}
 ]};
 
@@ -356,81 +347,69 @@ S["g-noprint"] = {type:"guide", title:"Le doy a imprimir y no sale nada",
       {t:"Mira si hay un trabajo anterior atascado en la cola. En Windows: opciones de impresión, pestaña **Mantenimiento**, **Cola de impresión** y en el menú Impresora elige **Cancelar todos los documentos**.", n:"En esa misma ventana, si la impresora figura “sin conexión” o “en pausa”, quita esa opción desde el menú Impresora. En Mac, si aparece en pausa, pulsa Reanudar."},
       {t:"Comprueba que esta impresora es la **predeterminada**.", n:"En Windows: Panel de control, Ver dispositivos e impresoras, clic derecho sobre la impresora y Establecer como predeterminada. Si ves copias como “EPSON XP-2200 Series (copia 1)”, quítalas."},
       "Si la conectas por **cable USB**, prueba a conectarla directamente al ordenador, sin alargadores, o cambia el puerto o el cable.",
-      "Si la usas por **Wi-Fi**, mira la guía de [[wifi|conexión Wi-Fi]]."
+      "Si la usas por **Wi-Fi**, mira la guía de [[g-wifi|conexión Wi-Fi]]."
     ]},
     {k:"tip", h:"Prueba rápida", t:"Pon papel y pulsa el botón **i** de la impresora. Si imprime un informe, la impresora funciona bien y el problema está en la conexión o en el ordenador."}
   ], src:"págs. 96–100"};
 
-S.wifi = {type:"menu", title:"Conexión Wi-Fi", intro:"¿Qué ocurre?", items:[
-  {ic:"🔁", t:"Primeros pasos", sub:"Arreglan la mayoría de los casos", to:"g-wifi-basic"},
-  {ic:"🧾", t:"He imprimido el informe y sale un código “E-…”", to:"g-wifi-codes"},
-  {ic:"🔎", t:"Está conectada pero el ordenador no la ve", to:"g-wifi-samenet"},
-  {ic:"🛠️", t:"Cambié de router o de contraseña", to:"g-wifi-reconfig"}
-]};
+S["g-wifi"] = {type:"guide", title:"La impresora no se conecta al Wi-Fi", fix:true,
+  lead:"Empieza por los primeros pasos: arreglan la mayoría de los casos. Si no, elige la pestaña que se parezca a lo que te pasa.", tabsLabel:"Qué ocurre",
+  tabs:[
+    {id:"basic", ic:"🔁", label:"Primeros pasos", blocks:[
+      {k:"steps", items:[
+        "Pulsa el botón **Wi-Fi** de la impresora para borrar el error.",
+        {t:"Apaga el router, el ordenador (o el móvil) y la impresora. Espera unos **10 segundos**.", n:"Enciéndelos por este orden: primero el router, luego el ordenador o el móvil y por último la impresora."},
+        "Acerca la impresora y el ordenador al router, sin obstáculos en medio.",
+        {t:"Pon papel en la impresora y pulsa el botón **i**. Imprime un **informe de conexión** con un código si hay un error.", n:"Si aparece un código “E-…”, búscalo en [[g-wifi/codes|la lista de códigos]]."},
+        "Comprueba que el ordenador y la impresora están conectados a **la misma red Wi-Fi** (mismo nombre)."
+      ]}
+    ], src:"págs. 80–86 y 100–103"},
+    {id:"codes", ic:"🧾", label:"Código “E-…”", lead:"En el informe impreso aparece un código. Pulsa el tuyo para ver la solución.", blocks:[
+      {k:"acc", items:[
+        {q:"E-1 · La Wi-Fi está desactivada", a:["Comprueba que el router está encendido.","Si quieres usar Wi-Fi, hay que [[g-wifi/reconfig|volver a configurarla]], porque está desactivada."]},
+        {q:"E-2, E-3 o E-7 · No encuentra la red", a:["Comprueba que el router está encendido. Apágalo 10 segundos y vuelve a encenderlo.","Acerca la impresora al router, sin obstáculos.","Si escribiste el nombre de la red a mano, revisa que es correcto (aparece en el informe).","Si el router tiene varias redes, elige la que se muestra.","El nombre de la red debe llevar solo letras, números y símbolos normales, sin tildes ni eñes.","Ten a mano el nombre y la contraseña del Wi-Fi: suelen estar en una etiqueta del router.","Si usas el botón WPS, comprueba que tu router lo admite."]},
+        {q:"E-5 · Seguridad no admitida", a:["El router debe usar un tipo de seguridad admitido: WEP, WPA, WPA2 o WPA3. Lo habitual es WPA2.","Si no lo es, cámbialo en el router y luego [[g-wifi/reconfig|configura de nuevo la impresora]]."]},
+        {q:"E-6 · El router no deja conectar", a:["Comprueba que el filtro de direcciones MAC del router está desactivado. Si está activado, añade la dirección MAC de la impresora (aparece en el informe).","Comprueba que el router admite tantos dispositivos como los que quieres conectar."]},
+        {q:"E-8 · No obtiene dirección de red", a:["Activa DHCP en el router.","Si la dirección de la impresora se puso a mano, es posible que sea incorrecta."]},
+        {q:"E-9, E-10, E-11, E-12 o E-13 · Problema con las direcciones de la red", a:["Comprueba que los demás aparatos de la red están encendidos y que tienen conexión a internet.","Apaga el router, espera 10 segundos y vuelve a encenderlo.","Vuelve a configurar la impresora con el instalador de la web de Epson (epson.sn, escribe XP-2200 y entra en Configuración).","Estos códigos suelen ser cosa del router: si persisten, pide ayuda a quien te instaló internet o a Sergio."]},
+        {q:"Mensaje “El entorno Wi-Fi debe mejorarse”", a:"Acerca la impresora al router, apártalos de obstáculos, apaga el router 10 segundos y enciéndelo."}
+      ]}
+    ], src:"págs. 80–86"},
+    {id:"samenet", ic:"🔎", label:"El ordenador no la ve", blocks:[
+      {k:"cases", items:[
+        {q:"No están en la misma red", a:"Algunos routers tienen varias redes, por ejemplo una de 2,4 GHz y otra de 5 GHz. La impresora debe estar en la misma red que el ordenador o el móvil. Mira en el informe de conexión (botón i) a qué red está conectada y conecta el ordenador a esa."},
+        {q:"El router bloquea la comunicación entre aparatos", a:"Muchos routers tienen una función de “separador de privacidad” que impide que los aparatos de la misma red se vean. Hay que desactivarla en el router."},
+        {q:"La dirección de la impresora empieza por 169.254", a:"Si en el informe la dirección es 169.254.xxx.xxx y la máscara 255.255.0.0, no se asignó bien. Reinicia el router o restablece la red de la impresora."},
+        {q:"El ordenador no tiene internet", a:"Prueba a abrir cualquier página web. Si no carga, el problema es del ordenador o del router."}
+      ]},
+      {k:"btns", items:[{label:"Volver a los primeros pasos", to:"g-wifi/basic"}]}
+    ], src:"págs. 101–103"},
+    {id:"reconfig", ic:"🛠️", label:"Cambié de router", lead:"Sirve si cambiaste de router, de contraseña o la impresora perdió la red. Tienes tres caminos.", blocks:[
+      {k:"acc", items:[
+        {q:"Con el ordenador (el más seguro)", a:["Entra en **epson.sn** desde el navegador, escribe XP-2200, ve a **Configuración** y sigue las instrucciones."]},
+        {q:"Con el botón WPS del router", a:[
+          "Tu router debe admitir WPS.",
+          "Mantén pulsado el botón WPS del router hasta que parpadee su luz de seguridad.",
+          "En la impresora, mantén pulsado el botón **Wi-Fi** al menos 5 segundos, hasta que las luces Wi-Fi y Wi-Fi directo parpadeen alternándose.",
+          "Cuando se conecte, la luz de Wi-Fi se queda fija.",
+          "Si da error, pulsa Wi-Fi para borrarlo, reinicia el router, acércalo y repite."
+        ]},
+        {q:"Borrar la red de la impresora y empezar de cero", a:[
+          "Apaga la impresora. Enciéndela manteniendo pulsado el botón **i**.",
+          "Se borra la configuración de red y las luces de red parpadean alternándose.",
+          "Después hay que configurar la red otra vez con el ordenador."
+        ]}
+      ]}
+    ], src:"págs. 14, 19, 77–80"}
+  ]};
 
 S["g-wifi-error"] = {type:"guide", title:"Error de conexión Wi-Fi", lamps:{wifi:"blink",direct:"blink"},
   blocks:[
     {k:"steps", items:[
       "Pulsa el botón **Wi-Fi** de la impresora para borrar el error y vuelve a intentarlo.",
-      "Si el error vuelve, sigue los [[g-wifi-basic|primeros pasos para la conexión]]."
+      "Si el error vuelve, sigue los [[g-wifi/basic|primeros pasos para la conexión]]."
     ]}
   ], src:"pág. 20"};
-
-S["g-wifi-basic"] = {type:"guide", title:"Primeros pasos con el Wi-Fi",
-  blocks:[
-    {k:"steps", items:[
-      "Pulsa el botón **Wi-Fi** de la impresora para borrar el error.",
-      {t:"Apaga el router, el ordenador (o el móvil) y la impresora. Espera unos **10 segundos**.", n:"Enciéndelos por este orden: primero el router, luego el ordenador o el móvil y por último la impresora."},
-      "Acerca la impresora y el ordenador al router, sin obstáculos en medio.",
-      {t:"Pon papel en la impresora y pulsa el botón **i**. Imprime un **informe de conexión** con un código si hay un error.", n:"Si aparece un código “E-…”, búscalo en [[g-wifi-codes|la lista de códigos]]."},
-      "Comprueba que el ordenador y la impresora están conectados a **la misma red Wi-Fi** (mismo nombre)."
-    ]}
-  ], src:"págs. 80–86 y 100–103"};
-
-S["g-wifi-codes"] = {type:"guide", title:"Códigos del informe de conexión", fix:true,
-  lead:"En el informe impreso aparece un código. Pulsa el tuyo para ver la solución.",
-  blocks:[
-    {k:"acc", items:[
-      {q:"E-1 · La Wi-Fi está desactivada", a:["Comprueba que el router está encendido.","Si quieres usar Wi-Fi, hay que [[g-wifi-reconfig|volver a configurarla]], porque está desactivada."]},
-      {q:"E-2, E-3 o E-7 · No encuentra la red", a:["Comprueba que el router está encendido. Apágalo 10 segundos y vuelve a encenderlo.","Acerca la impresora al router, sin obstáculos.","Si escribiste el nombre de la red a mano, revisa que es correcto (aparece en el informe).","Si el router tiene varias redes, elige la que se muestra.","El nombre de la red debe llevar solo letras, números y símbolos normales, sin tildes ni eñes.","Ten a mano el nombre y la contraseña del Wi-Fi: suelen estar en una etiqueta del router.","Si usas el botón WPS, comprueba que tu router lo admite."]},
-      {q:"E-5 · Seguridad no admitida", a:["El router debe usar un tipo de seguridad admitido: WEP, WPA, WPA2 o WPA3. Lo habitual es WPA2.","Si no lo es, cámbialo en el router y luego [[g-wifi-reconfig|configura de nuevo la impresora]]."]},
-      {q:"E-6 · El router no deja conectar", a:["Comprueba que el filtro de direcciones MAC del router está desactivado. Si está activado, añade la dirección MAC de la impresora (aparece en el informe).","Comprueba que el router admite tantos dispositivos como los que quieres conectar."]},
-      {q:"E-8 · No obtiene dirección de red", a:["Activa DHCP en el router.","Si la dirección de la impresora se puso a mano, es posible que sea incorrecta."]},
-      {q:"E-9, E-10, E-11, E-12 o E-13 · Problema con las direcciones de la red", a:["Comprueba que los demás aparatos de la red están encendidos y que tienen conexión a internet.","Apaga el router, espera 10 segundos y vuelve a encenderlo.","Vuelve a configurar la impresora con el instalador de la web de Epson (epson.sn, escribe XP-2200 y entra en Configuración).","Estos códigos suelen ser cosa del router: si persisten, pide ayuda a quien te instaló internet o a Sergio."]},
-      {q:"Mensaje “El entorno Wi-Fi debe mejorarse”", a:"Acerca la impresora al router, apártalos de obstáculos, apaga el router 10 segundos y enciéndelo."}
-    ]}
-  ], src:"págs. 80–86"};
-
-S["g-wifi-samenet"] = {type:"guide", title:"Conectada, pero el ordenador no la ve",
-  blocks:[
-    {k:"cases", items:[
-      {q:"No están en la misma red", a:"Algunos routers tienen varias redes, por ejemplo una de 2,4 GHz y otra de 5 GHz. La impresora debe estar en la misma red que el ordenador o el móvil. Mira en el informe de conexión (botón i) a qué red está conectada y conecta el ordenador a esa."},
-      {q:"El router bloquea la comunicación entre aparatos", a:"Muchos routers tienen una función de “separador de privacidad” que impide que los aparatos de la misma red se vean. Hay que desactivarla en el router."},
-      {q:"La dirección de la impresora empieza por 169.254", a:"Si en el informe la dirección es 169.254.xxx.xxx y la máscara 255.255.0.0, no se asignó bien. Reinicia el router o restablece la red de la impresora."},
-      {q:"El ordenador no tiene internet", a:"Prueba a abrir cualquier página web. Si no carga, el problema es del ordenador o del router."}
-    ]},
-    {k:"btns", items:[{label:"Primeros pasos con el Wi-Fi", to:"g-wifi-basic"}]}
-  ], src:"págs. 101–103"};
-
-S["g-wifi-reconfig"] = {type:"guide", title:"Configurar otra vez el Wi-Fi",
-  lead:"Sirve si cambiaste de router, de contraseña o la impresora perdió la red. Tienes tres caminos.",
-  blocks:[
-    {k:"acc", items:[
-      {q:"Con el ordenador (el más seguro)", a:["Entra en **epson.sn** desde el navegador, escribe XP-2200, ve a **Configuración** y sigue las instrucciones."]},
-      {q:"Con el botón WPS del router", a:[
-        "Tu router debe admitir WPS.",
-        "Mantén pulsado el botón WPS del router hasta que parpadee su luz de seguridad.",
-        "En la impresora, mantén pulsado el botón **Wi-Fi** al menos 5 segundos, hasta que las luces Wi-Fi y Wi-Fi directo parpadeen alternándose.",
-        "Cuando se conecte, la luz de Wi-Fi se queda fija.",
-        "Si da error, pulsa Wi-Fi para borrarlo, reinicia el router, acércalo y repite."
-      ]},
-      {q:"Borrar la red de la impresora y empezar de cero", a:[
-        "Apaga la impresora. Enciéndela manteniendo pulsado el botón **i**.",
-        "Se borra la configuración de red y las luces de red parpadean alternándose.",
-        "Después hay que configurar la red otra vez con el ordenador."
-      ]}
-    ]}
-  ], src:"págs. 14, 19, 77–80"};
 
 S["g-power"] = {type:"guide", title:"No se enciende o no se apaga",
   blocks:[
@@ -571,16 +550,16 @@ S.help = {type:"help", title:"Si sigue sin funcionar"};
 
 /* ################ VIDEOLLAMADAS (TEAMS) ################ */
 /* ---- Inicio ---- */
-S["teams"] = {type:"menu", title:"¿Qué quieres hacer?", logo:"i-teams",
+S["teams"] = {type:"menu", title:"¿Qué quieres hacer?", logo:"i-teams", tabsLabel:"Momento de la llamada",
   intro:"Elige si todavía no has entrado o si ya estás en la llamada. Te voy guiando paso a paso.",
   tabs:[
-    {label:"Antes de entrar", intro:"Para prepararte y entrar en la llamada.", items:[
+    {id:"antes", label:"Antes de entrar", intro:"Para prepararte y entrar en la llamada.", items:[
       {ic:"🔗", t:"Entrar a una clase o charla", sub:"Con el enlace que me han enviado", to:"t-join"},
       {ic:"🎬", t:"Probar cámara y sonido", sub:"En la pantalla previa, antes de unirte", to:"t-prejoin"},
       {ic:"⏱️", t:"Lista rápida antes de la clase", to:"t-checklist"},
       {ic:"🛠️", t:"Algo no funciona", sub:"No me ven, no me oyen, no puedo entrar…", to:"t-problems"}
     ]},
-    {label:"Ya estoy dentro", intro:"Para cuando ya estás en la llamada.", items:[
+    {id:"dentro", label:"Ya estoy dentro", intro:"Para cuando ya estás en la llamada.", items:[
       {ic:"🎛️", t:"¿Qué hace cada botón?", to:"t-controls"},
       {ic:"🖥️", t:"Compartir pantalla", to:"t-share"},
       {ic:"🛠️", t:"Algo no funciona", sub:"No me ven, no me oyen, no puedo compartir…", to:"t-problems"}

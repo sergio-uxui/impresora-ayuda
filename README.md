@@ -32,6 +32,8 @@ js/app.js         Lógica: navegación, secciones, luces de la impresora, barra 
 - Las pantallas de **Teams** llevan el prefijo `t-` (`t-join`, `t-share`…) y las de **Citibox**, `c-`. Las de la impresora no.
 - Una pantalla pertenece a una sección según su identificador (ver `secOf` en `js/app.js`). `SECTIONS` define, para cada una, su nombre en las migas, el pie y adónde llevan “Sí, ya funciona” y “Volver al inicio”.
 - Tipos de pantalla: `menu`, `cards`, `guide`, `panel`, `done`, `help`.
+- **Tres niveles como máximo** (sección › tema › contenido). Cuando un tema tiene variantes, van en **pestañas** dentro de la misma pantalla en lugar de abrir otra: `tabs:[{id, label, ic, …}]` con `tabsLabel` como nombre del grupo. En un `menu` cada pestaña lleva `items`; en `cards`, `cards`; en una `guide`, `lead`, `lamps`, `blocks` y `src` (los `blocks` de la guía van antes de las pestañas y `after`, después).
+- La pestaña elegida va en la dirección: `#/g-wifi/codes` abre “Código E-…”. Sirve también en los enlaces (`to:"lights/ink"`, `[[g-replace/on|…]]`).
 - Bloques de una guía (`blocks`): `p`, `warn`, `tip`, `steps`, `list`, `cases`, `acc`, `btns`, `toolbar`, `demo` y `video` (vídeo de YouTube que solo se carga al pulsar: `{k:"video", yt:"<id>", t:"título"}`).
 - `demo` es una animación en bucle (como un GIF) que repite una acción: `{k:"demo", v:"<nombre en DEMOS>"}`. Se dibuja con HTML y CSS en `DEMOS` (`js/app.js`); tiene botón de pausa y, con movimiento reducido, muestra una imagen fija.
 - Un paso también puede llevar su propia animación debajo: `{t:"…", demo:"join-link"}` (ver "Entrar con el enlace" y "Compartir pantalla").

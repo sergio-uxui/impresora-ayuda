@@ -18,7 +18,7 @@ var SEC = SECTIONS.hub;
 function fmt(s){
   return String(s)
     .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
-    .replace(/\[\[([\w-]+)\|(.+?)\]\]/g,'<a href="#/$1">$2</a>');
+    .replace(/\[\[([\w\/-]+)\|(.+?)\]\]/g,'<a href="#/$1">$2</a>');
 }
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
@@ -290,24 +290,26 @@ function choices(items){
   }).join("") + "</nav>";
 }
 
-/* Pestañas de un menú. La elegida se recuerda en la sesión para volver a ella con "Volver" */
-function tabsHtml(s,id){
+/* Pestañas. La elegida va en la dirección (#/pantalla/pestaña), así "Volver" y los enlaces llevan a ella */
+var TAB = "";
+function tabsHtml(s,id,panel){
   var cur = 0;
-  try{ cur = +(sessionStorage.getItem("tab-"+id) || 0); }catch(e){}
-  if(!s.tabs[cur]) cur = 0;
+  s.tabs.forEach(function(t,i){ if(t.id === TAB) cur = i; });
   var bar = s.tabs.map(function(t,i){
-    return '<button type="button" role="tab" class="tab" id="tab-'+i+'" aria-controls="tp-'+i+'" aria-selected="'+(i===cur)+'"'+(i===cur?"":' tabindex="-1"')+'>'+esc(t.label)+'</button>';
+    return '<button type="button" role="tab" class="tab" id="tab-'+i+'" aria-controls="tp-'+i+'" aria-selected="'+(i===cur)+'"'+(i===cur?"":' tabindex="-1"')+'>'+
+      (t.ic?'<span class="tic" aria-hidden="true">'+t.ic+'</span>':"")+esc(t.label)+'</button>';
   }).join("");
   var panels = s.tabs.map(function(t,i){
-    return '<div role="tabpanel" class="tabpanel" id="tp-'+i+'" aria-labelledby="tab-'+i+'"'+(i===cur?"":" hidden")+'>'+
-      (t.intro?'<p class="tabintro">'+fmt(t.intro)+'</p>':"")+choices(t.items)+'</div>';
+    return '<div role="tabpanel" class="tabpanel" id="tp-'+i+'" aria-labelledby="tab-'+i+'"'+(i===cur?"":" hidden")+'>'+panel(t)+'</div>';
   }).join("");
-  return '<div class="tabs" data-menu="'+id+'"><div class="tablist" role="tablist" aria-label="Momento de la llamada">'+bar+'</div>'+panels+'</div>';
+  return '<div class="tabs" data-id="'+id+'" data-keys="'+s.tabs.map(function(t){return t.id}).join(" ")+'">' +
+    '<div class="tablist'+(s.tabs.length>3?" many":"")+'" data-n="'+s.tabs.length+'" role="tablist" aria-label="'+esc(s.tabsLabel||"Elige una opción")+'">'+bar+'</div>'+panels+'</div>';
 }
 function bindTabs(){
   var box = main.querySelector(".tabs");
   if(!box) return;
   var tabs = [].slice.call(box.querySelectorAll('[role="tab"]'));
+  var keys = box.dataset.keys.split(" ");
   function select(i, focus){
     tabs.forEach(function(t,j){
       t.setAttribute("aria-selected", String(i===j));
@@ -315,7 +317,9 @@ function bindTabs(){
       document.getElementById(t.getAttribute("aria-controls")).hidden = i!==j;
     });
     if(focus) tabs[i].focus();
-    try{ sessionStorage.setItem("tab-"+box.dataset.menu, String(i)); }catch(e){}
+    TAB = keys[i];
+    stopSpeech();
+    try{ history.replaceState(null, "", "#/"+box.dataset.id+"/"+keys[i]); }catch(e){}
   }
   tabs.forEach(function(t,i){
     t.addEventListener("click", function(){ select(i); });
@@ -335,16 +339,20 @@ function renderMenu(s,id){
     ? '<div class="h1row"><svg class="h1logo" aria-hidden="true"><use href="#'+s.logo+'"/></svg><h1>'+title+'</h1></div>'
     : "<h1>"+title+"</h1>";
   if(s.intro) h += '<p class="lead">'+fmt(s.intro)+"</p>";
-  h += s.tabs ? tabsHtml(s,id) : choices(s.items);
+  h += s.tabs ? tabsHtml(s,id,function(t){ return (t.intro?'<p class="tabintro">'+fmt(t.intro)+'</p>':"")+choices(t.items); }) : choices(s.items);
   if(s.extra) h += s.extra.map(function(x){return '<a class="btn block" href="#/'+x.to+'">'+esc(x.label)+"</a>"}).join("");
   return h;
 }
 
-function renderCards(s){
-  var h = "<h1>"+fmt(s.title)+"</h1><p class=\"lead\">"+fmt(s.intro)+"</p>";
-  h += s.cards.map(function(c){
+function cardsHtml(cards){
+  return cards.map(function(c){
     return '<a class="lcard" href="#/'+c.to+'">'+lamp(c.lamps)+"<h3>"+fmt(c.t)+"</h3><p>"+fmt(c.d)+'</p><span class="go">Ver qué hacer ›</span></a>';
   }).join("");
+}
+function renderCards(s,id){
+  var h = "<h1>"+fmt(s.title)+"</h1><p class=\"lead\">"+fmt(s.intro)+"</p>";
+  h += s.tabs ? tabsHtml(s,id,function(t){ return (t.intro?'<p class="tabintro">'+fmt(t.intro)+'</p>':"")+cardsHtml(t.cards); }) : cardsHtml(s.cards);
+  if(s.extra) h += s.extra.map(function(x){return '<a class="btn block" href="#/'+x.to+'">'+esc(x.label)+"</a>"}).join("");
   return h;
 }
 
@@ -352,7 +360,13 @@ function renderGuide(s,id){
   var h = "<h1>"+fmt(s.title)+"</h1>";
   if(s.lamps) h += lamp(s.lamps).replace('class="strip"','class="strip big"');
   if(s.lead) h += '<p class="lead">'+fmt(s.lead)+"</p>";
-  h += s.blocks.map(renderBlock).join("");
+  if(s.blocks) h += s.blocks.map(renderBlock).join("");
+  if(s.tabs) h += tabsHtml(s,id,function(t){
+    return (t.lamps?lamp(t.lamps).replace('class="strip"','class="strip big"'):"") +
+      (t.lead?'<p class="tabintro">'+fmt(t.lead)+"</p>":"") + t.blocks.map(renderBlock).join("") +
+      (t.src?'<p class="src">Fuente: '+esc(SEC.srcPrefix)+esc(t.src)+".</p>":"");
+  });
+  if(s.after) h += s.after.map(renderBlock).join("");
   if(s.fix === true || (s.fix !== false && secOf(id) === "printer")) h += fixBlock();
   if(s.src) h += '<p class="src">Fuente: '+esc(SEC.srcPrefix)+esc(s.src)+".</p>";
   return h;
@@ -411,14 +425,16 @@ function renderHelpGeneric(s){
 }
 
 function render(){
-  var id = (location.hash.replace(/^#\/?/,"")) || "home";
+  var path = location.hash.replace(/^#\/?/,"").split("/");
+  var id = path[0] || "home";
+  TAB = path[1] || "";
   if(!S[id]) id = "home";
   var s = S[id], h;
   SEC = SECTIONS[secOf(id)];
   document.getElementById("foot").textContent = SEC.foot;
   switch(s.type){
     case "menu": h = renderMenu(s,id); break;
-    case "cards": h = renderCards(s); break;
+    case "cards": h = renderCards(s,id); break;
     case "guide": h = renderGuide(s,id); break;
     case "panel": h = renderPanel(s); break;
     case "done": h = renderDone(s); break;
