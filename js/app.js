@@ -478,23 +478,72 @@ function render(){
 function sayLabel(on){
   return '<span aria-hidden="true">'+(on?"⏹":"🔊")+'</span><span class="lbl">'+(on?"Parar la lectura":"Leer en voz alta")+'</span>';
 }
-var speaking = false;
+/* Lectura en voz alta. Se lee frase a frase (Chrome corta los textos largos a los ~15 s)
+   y con una voz española del propio dispositivo si la hay (las de internet fallan más) */
+var speaking = false, sayRun = 0, sayQueue = [];
+function esVoice(){
+  var vs = speechSynthesis.getVoices().filter(function(v){ return /^es[-_]/i.test(v.lang) || v.lang === "es"; });
+  var pick = function(f){ for(var i=0;i<vs.length;i++) if(f(vs[i])) return vs[i]; };
+  return pick(function(v){ return v.localService && /es[-_]ES/i.test(v.lang); }) ||
+         pick(function(v){ return v.localService; }) ||
+         pick(function(v){ return /es[-_]ES/i.test(v.lang); }) || vs[0] || null;
+}
+function sayText(el){
+  /* Sin lo que está oculto a los lectores de pantalla (animaciones, iconos) */
+  el.classList.add("reading");
+  var t = el.innerText;
+  el.classList.remove("reading");
+  t = t.replace(/[\u2190-\u2BFF\u2600-\u27BF\uFE0F]|[\uD83C-\uDBFF][\uDC00-\uDFFF]/g, "").replace(/[›‹]/g, "");
+  var out = [];
+  t.split(/\n+/).forEach(function(line){
+    line = line.replace(/\s+/g," ").trim();
+    if(!line) return;
+    (line.match(/[^.!?…]+[.!?…]*\s*/g) || [line]).forEach(function(f){
+      f = f.trim();
+      while(f.length > 180){ var cut = f.lastIndexOf(" ", 180); if(cut < 60) cut = 180; out.push(f.slice(0,cut)); f = f.slice(cut).trim(); }
+      if(f) out.push(f);
+    });
+  });
+  return out;
+}
+function setSayBtn(on){
+  var b = document.getElementById("say");
+  if(b){ b.setAttribute("aria-pressed", String(on)); b.innerHTML = sayLabel(on); }
+}
 function stopSpeech(){
+  sayRun++; sayQueue = [];
   if("speechSynthesis" in window){ try{ speechSynthesis.cancel(); }catch(e){} }
   speaking = false;
-  var b = document.getElementById("say"); if(b){ b.setAttribute("aria-pressed","false"); b.innerHTML = sayLabel(false); }
+  setSayBtn(false);
+}
+function sayNext(run, voice){
+  if(run !== sayRun) return;
+  var f = sayQueue.shift();
+  if(f === undefined){ stopSpeech(); return; }
+  var u = new SpeechSynthesisUtterance(f);
+  u.lang = voice ? voice.lang : "es-ES"; if(voice) u.voice = voice;
+  u.rate = 0.92;
+  u.onend = function(){ sayNext(run, voice); };
+  u.onerror = function(e){
+    if(run !== sayRun || e.error === "interrupted" || e.error === "canceled") return;
+    sayNext(run, voice);
+  };
+  window.__sayU = u; /* referencia viva: si se pierde, Chrome y Safari dejan de leer */
+  speechSynthesis.speak(u);
 }
 function toggleSpeech(){
   if(speaking){ stopSpeech(); return; }
   var el = document.getElementById("readable");
   if(!el) return;
-  var u = new SpeechSynthesisUtterance(el.innerText);
-  u.lang = "es-ES"; u.rate = 0.92;
-  u.onend = u.onerror = stopSpeech;
+  stopSpeech();
+  sayQueue = sayText(el);
+  if(!sayQueue.length) return;
   speaking = true;
-  var b = document.getElementById("say"); if(b){ b.setAttribute("aria-pressed","true"); b.innerHTML = sayLabel(true); }
-  speechSynthesis.speak(u);
+  setSayBtn(true);
+  try{ speechSynthesis.resume(); }catch(e){}
+  sayNext(sayRun, esVoice());
 }
+if("speechSynthesis" in window && speechSynthesis.addEventListener) speechSynthesis.addEventListener("voiceschanged", function(){});
 
 /* Botón de leer en voz alta: se crea una vez. En el móvil va a la derecha del tamaño de letra; si no, junto a Volver e Inicio */
 var sayBtn = null, mobile = window.matchMedia("(max-width:40em)");

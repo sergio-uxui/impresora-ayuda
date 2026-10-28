@@ -550,4 +550,5 @@ details.acc .accb{padding:0 1.1rem .9rem}
 footer{border-top:1px solid var(--line);padding:20px 0 36px;color:var(--muted);font-size:.8rem}
 footer p{max-width:none}
 .say{display:inline-flex}
+.reading [aria-hidden="true"],.reading .demo-toggle,.reading .src{display:none!important}
 .contact{font-size:1.2rem;font-weight:700}
