@@ -348,24 +348,40 @@ function tabsHtml(s,id,panel){
     return '<div role="tabpanel" class="tabpanel" id="tp-'+i+'" aria-labelledby="tab-'+i+'"'+(i===cur?"":" hidden")+'>'+panel(t)+'</div>';
   }).join("");
   return '<div class="tabs" data-id="'+id+'" data-keys="'+s.tabs.map(function(t){return t.id}).join(" ")+'">' +
-    '<div class="tablist'+(s.tabs.length>3?" many":"")+'" data-n="'+s.tabs.length+'" role="tablist" aria-label="'+esc(s.tabsLabel||"Elige una opción")+'">'+bar+'</div>'+panels+'</div>';
+    '<div class="tabbar"><div class="tablist" role="tablist" aria-label="'+esc(s.tabsLabel||"Elige una opción")+'">'+bar+'</div></div>'+panels+'</div>';
 }
 function bindTabs(){
   var box = main.querySelector(".tabs");
   if(!box) return;
   var tabs = [].slice.call(box.querySelectorAll('[role="tab"]'));
   var keys = box.dataset.keys.split(" ");
+  var list = box.querySelector(".tablist");
+  /* Difumina el borde por el que quedan más pestañas */
+  function edges(){
+    list.classList.toggle("fade-l", list.scrollLeft > 4);
+    list.classList.toggle("fade-r", list.scrollLeft + list.clientWidth < list.scrollWidth - 4);
+  }
+  function reveal(t){
+    var l = t.offsetLeft, r = l + t.offsetWidth;
+    if(l < list.scrollLeft + 24) list.scrollLeft = l - 24;
+    else if(r > list.scrollLeft + list.clientWidth - 24) list.scrollLeft = r - list.clientWidth + 24;
+  }
+  list.addEventListener("scroll", edges, {passive:true});
+  window.addEventListener("resize", edges);
   function select(i, focus){
     tabs.forEach(function(t,j){
       t.setAttribute("aria-selected", String(i===j));
       if(i===j) t.removeAttribute("tabindex"); else t.setAttribute("tabindex","-1");
       document.getElementById(t.getAttribute("aria-controls")).hidden = i!==j;
     });
-    if(focus) tabs[i].focus();
+    if(focus) tabs[i].focus({preventScroll:true});
+    reveal(tabs[i]);
     TAB = keys[i];
     stopSpeech();
     try{ history.replaceState(null, "", "#/"+box.dataset.id+"/"+keys[i]); }catch(e){}
   }
+  tabs.forEach(function(t){ if(t.getAttribute("aria-selected") === "true") reveal(t); });
+  edges();
   tabs.forEach(function(t,i){
     t.addEventListener("click", function(){ select(i); });
     t.addEventListener("keydown", function(e){

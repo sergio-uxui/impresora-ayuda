@@ -69,7 +69,7 @@ S.lights = {type:"cards", title:"¿Qué luz te llama la atención?",
     {lamps:{paper:"slow"}, t:"Parpadea despacio", d:"Hay un atasco de papel.", to:"g-jam"},
     {lamps:{paper:"fast"}, t:"Parpadea rápido", d:"Ha quedado papel dentro de la impresora.", to:"g-paper-inside"}
   ]},
-  {id:"both", ic:"💧📄", label:"Tinta y papel", intro:CARDS_HINT, cards:[
+  {id:"both", ic:"💧📄", label:"Las dos", intro:CARDS_HINT, cards:[
     {lamps:{ink:"on",paper:"on"}, t:"Las dos fijas", d:"La impresora se apagó de forma incorrecta.", to:"g-bad-off"},
     {lamps:{ink:"blink",paper:"blink"}, t:"Las dos parpadean a la vez", d:"Una pieza interior que recoge tinta sobrante está casi llena.", to:"g-pad"},
     {lamps:{ink:"blink",paper:"alt"}, t:"Parpadean una y otra, alternando", d:"La pieza que recoge tinta al imprimir sin márgenes está casi llena.", to:"g-pad-borderless"}
@@ -195,7 +195,7 @@ S["g-replace"] = {type:"guide", title:"Cambiar un cartucho",
         {t:"Mantén pulsado el **botón de parar** durante **10 segundos**. El carro de cartuchos se mueve a la posición de cambio.", n:"Para cancelar, deja los cartuchos puestos y apaga la impresora."}
       ].concat(CART_COMMON).concat(CART_END)}
     ], src:"págs. 127–132"},
-    {id:"on", ic:"🟠", label:"Fija o parpadea", lamps:{ink:"on"}, lead:"Un cartucho está agotado o se está acabando.", blocks:[
+    {id:"on", ic:"🟠", label:"Encendida", lamps:{ink:"on"}, lead:"La luz está fija o parpadea: un cartucho está agotado o se está acabando.", blocks:[
       {k:"steps", items:[
         "**Levanta la parte de arriba** (el escáner) con la tapa de documentos cerrada. No toques el carro de cartuchos de dentro.",
         {t:"Mueve el carro de cartuchos:", n:"Si la luz de la tinta está **fija**: pulsa una vez el botón de parar. Si **parpadea**: mantén pulsado el botón de parar 10 segundos. El carro se mueve a un punto marcado con una gota tachada, donde todavía no se pueden cambiar cartuchos."},
@@ -367,7 +367,7 @@ S["g-wifi"] = {type:"guide", title:"La impresora no se conecta al Wi-Fi", fix:tr
         "Comprueba que el ordenador y la impresora están conectados a **la misma red Wi-Fi** (mismo nombre)."
       ]}
     ], src:"págs. 80–86 y 100–103"},
-    {id:"codes", ic:"🧾", label:"Código “E-…”", lead:"En el informe impreso aparece un código. Pulsa el tuyo para ver la solución.", blocks:[
+    {id:"codes", ic:"🧾", label:"Códigos E", lead:"En el informe impreso aparece un código. Pulsa el tuyo para ver la solución.", blocks:[
       {k:"acc", items:[
         {q:"E-1 · La Wi-Fi está desactivada", a:["Comprueba que el router está encendido.","Si quieres usar Wi-Fi, hay que [[g-wifi/reconfig|volver a configurarla]], porque está desactivada."]},
         {q:"E-2, E-3 o E-7 · No encuentra la red", a:["Comprueba que el router está encendido. Apágalo 10 segundos y vuelve a encenderlo.","Acerca la impresora al router, sin obstáculos.","Si escribiste el nombre de la red a mano, revisa que es correcto (aparece en el informe).","Si el router tiene varias redes, elige la que se muestra.","El nombre de la red debe llevar solo letras, números y símbolos normales, sin tildes ni eñes.","Ten a mano el nombre y la contraseña del Wi-Fi: suelen estar en una etiqueta del router.","Si usas el botón WPS, comprueba que tu router lo admite."]},
@@ -378,7 +378,7 @@ S["g-wifi"] = {type:"guide", title:"La impresora no se conecta al Wi-Fi", fix:tr
         {q:"Mensaje “El entorno Wi-Fi debe mejorarse”", a:"Acerca la impresora al router, apártalos de obstáculos, apaga el router 10 segundos y enciéndelo."}
       ]}
     ], src:"págs. 80–86"},
-    {id:"samenet", ic:"🔎", label:"El ordenador no la ve", blocks:[
+    {id:"samenet", ic:"🔎", label:"No aparece", lead:"Está conectada, pero el ordenador no la ve.", blocks:[
       {k:"cases", items:[
         {q:"No están en la misma red", a:"Algunos routers tienen varias redes, por ejemplo una de 2,4 GHz y otra de 5 GHz. La impresora debe estar en la misma red que el ordenador o el móvil. Mira en el informe de conexión (botón i) a qué red está conectada y conecta el ordenador a esa."},
         {q:"El router bloquea la comunicación entre aparatos", a:"Muchos routers tienen una función de “separador de privacidad” que impide que los aparatos de la misma red se vean. Hay que desactivarla en el router."},
@@ -387,7 +387,7 @@ S["g-wifi"] = {type:"guide", title:"La impresora no se conecta al Wi-Fi", fix:tr
       ]},
       {k:"btns", items:[{label:"Volver a los primeros pasos", to:"g-wifi/basic"}]}
     ], src:"págs. 101–103"},
-    {id:"reconfig", ic:"🛠️", label:"Cambié de router", lead:"Sirve si cambiaste de router, de contraseña o la impresora perdió la red. Tienes tres caminos.", blocks:[
+    {id:"reconfig", ic:"🛠️", label:"Nuevo router", lead:"Sirve si cambiaste de router, de contraseña o la impresora perdió la red. Tienes tres caminos.", blocks:[
       {k:"acc", items:[
         {q:"Con el ordenador (el más seguro)", a:["Entra en **epson.sn** desde el navegador, escribe XP-2200, ve a **Configuración** y sigue las instrucciones."]},
         {q:"Con el botón WPS del router", a:[
@@ -556,13 +556,13 @@ S.help = {type:"help", title:"Si sigue sin funcionar"};
 S["teams"] = {type:"menu", title:"¿Qué quieres hacer?", logo:"i-teams", tabsLabel:"Momento de la llamada",
   intro:"Elige si todavía no has entrado o si ya estás en la llamada. Te voy guiando paso a paso.",
   tabs:[
-    {id:"antes", label:"Antes de entrar", intro:"Para prepararte y entrar en la llamada.", items:[
+    {id:"antes", ic:"🚪", label:"Para entrar", intro:"Para prepararte y entrar en la llamada.", items:[
       {ic:"🔗", t:"Entrar a una clase o charla", sub:"Con el enlace que me han enviado", to:"t-join"},
       {ic:"🎬", t:"Probar cámara y sonido", sub:"En la pantalla previa, antes de unirte", to:"t-prejoin"},
       {ic:"⏱️", t:"Lista rápida antes de la clase", to:"t-checklist"},
       {ic:"🛠️", t:"Algo no funciona", sub:"No me ven, no me oyen, no puedo entrar…", to:"t-problems"}
     ]},
-    {id:"dentro", label:"Ya estoy dentro", intro:"Para cuando ya estás en la llamada.", items:[
+    {id:"dentro", ic:"🎥", label:"En llamada", intro:"Para cuando ya estás en la llamada.", items:[
       {ic:"🎛️", t:"¿Qué hace cada botón?", to:"t-controls"},
       {ic:"🖥️", t:"Compartir pantalla", to:"t-share"},
       {ic:"🛠️", t:"Algo no funciona", sub:"No me ven, no me oyen, no puedo compartir…", to:"t-problems"}
@@ -779,7 +779,7 @@ S.navigo = {type:"guide", title:"La tarjeta Navigo en el iPhone",
       ]},
       {k:"btns", items:[{label:"¿Qué pase elijo?", to:"navigo/pass"}]}
     ]},
-    {id:"pass", ic:"🎟️", label:"Qué pase elegir", blocks:[
+    {id:"pass", ic:"🎟️", label:"Qué pase", blocks:[
       {k:"p", t:"La lista de lo que se vende dentro del móvil la da **Île-de-France Mobilités (IDFM)**. Según su página, hoy incluye:"},
       {k:"list", items:[
         "**Navigo** Día, Semana y Mes.",
@@ -791,7 +791,7 @@ S.navigo = {type:"guide", title:"La tarjeta Navigo en el iPhone",
       {k:"warn", h:"Semana y Mes, fuera de Cartera", t:"La Navigo **Semana** y la **Mes** no se compran en Cartera. Se compran en la app de **IDFM**, en **Bonjour RATP** o en **SNCF Connect**, con una cuenta de **IDFM Connect**, y después se añaden a la Navigo de Cartera."},
       {k:"tip", h:"Sin comprobar", t:"Parece que la Navigo Semana vale **de lunes a domingo**, no siete días desde que la compras. Compruébalo antes de comprarla."}
     ]},
-    {id:"use", ic:"📲", label:"Cómo usarla", blocks:[
+    {id:"use", ic:"📲", label:"Usarla", blocks:[
       {k:"steps", items:[
         {t:"La primera Navigo que añades se configura sola en **Modo Exprés**.", n:"Así no tienes que abrir nada para pasar."},
         {t:"En el torniquete, acerca la **parte de arriba del iPhone** al lector.", n:"No hace falta desbloquearlo.", demo:"nv-tap"},
@@ -806,7 +806,7 @@ S.navigo = {type:"guide", title:"La tarjeta Navigo en el iPhone",
         {t:"Elige el pase y confirma con **Apple Pay**.", n:"Para repetir un pase que ya usaste, elige **Comprar más**."}
       ]}
     ]},
-    {id:"help", ic:"🛠️", label:"Si algo falla", lead:"Pulsa lo que te pasa para ver qué hacer.", blocks:[
+    {id:"help", ic:"🛠️", label:"Problemas", lead:"Pulsa lo que te pasa para ver qué hacer.", blocks:[
       {k:"acc", items:[
         {q:"Me quedo sin batería", a:["Con el Modo Exprés, una guía de terceros dice que funciona hasta **5 horas** después de que el iPhone se apague. Otra fuente dice que no necesita batería.","**No cuentes con ello**: mejor sal con batería."]},
         {q:"Cambio de móvil o lo pierdo", a:["La Navigo solo puede estar en **un dispositivo a la vez**.","Si la eliminas, el **saldo se guarda** y puedes pasarla a otro iPhone con la misma cuenta Apple.","Si pierdes el móvil, una guía de terceros dice que se puede desactivar con la app **Buscar**."]},

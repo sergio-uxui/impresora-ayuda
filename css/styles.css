@@ -152,19 +152,27 @@ p{margin:.5rem 0 .9rem;max-width:36rem}
 .h1row{display:flex;align-items:center;gap:.7rem;margin:.4rem 0 .6rem}
 .h1row h1{margin:0}
 .h1logo{flex:none;width:2.6rem;height:2.6rem}
-.tablist{display:flex;gap:4px;padding:4px;margin:1.2rem 0 .4rem;background:var(--surface);border:1px solid var(--line);border-radius:14px}
-.tab{
-  flex:1;min-height:3rem;padding:.4rem .8rem;border:0;border-radius:10px;cursor:pointer;
-  font:inherit;font-weight:700;background:transparent;color:var(--muted);
+/* Pestañas: icono arriba, título corto debajo, en una fila que se desliza en horizontal */
+.tablist{
+  position:relative;display:flex;gap:2px;padding:6px 6px 0;overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;scroll-padding-inline:6px;scrollbar-width:none;
 }
-.tab:hover{color:var(--ink);background:var(--paper)}
-.tab[aria-selected="true"]{background:var(--brand);color:var(--brand-ink)}
-.tablist.many{display:grid;grid-template-columns:repeat(3,1fr)}
-.tablist.many[data-n="4"]{grid-template-columns:repeat(4,1fr)}
-.tablist.many .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;padding:.5rem .4rem;font-size:.95rem;line-height:1.25}
-.tic{margin-right:.35em}
-.tablist.many .tic{margin:0;font-size:1.2em}
-@media (max-width:40em){ .tablist.many[data-n="4"]{grid-template-columns:repeat(2,1fr)} }
+.tabbar{margin:1.2rem 0 .4rem;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tablist::-webkit-scrollbar{display:none}
+.tablist.fade-r{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 2.5rem),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 2.5rem),transparent)}
+.tablist.fade-l{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 2.5rem),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 2.5rem),transparent)}
+.tablist.fade-l.fade-r{-webkit-mask-image:linear-gradient(to right,transparent,#000 2.5rem,#000 calc(100% - 2.5rem),transparent);mask-image:linear-gradient(to right,transparent,#000 2.5rem,#000 calc(100% - 2.5rem),transparent)}
+.tab{
+  position:relative;flex:1 0 auto;min-width:4.6rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;
+  padding:.45rem .7rem .8rem;border:0;border-radius:10px 10px 0 0;cursor:pointer;scroll-snap-align:start;
+  font:inherit;font-size:.9rem;line-height:1.2;white-space:nowrap;background:transparent;color:var(--muted);
+}
+.tab::after{content:"";position:absolute;left:18%;right:18%;bottom:0;height:3px;border-radius:3px 3px 0 0;background:transparent}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--brand);font-weight:700}
+.tab[aria-selected="true"]::after{background:var(--brand)}
+.tic{font-size:1.45rem;line-height:1;filter:grayscale(1);opacity:.7}
+.tab:hover .tic,.tab[aria-selected="true"] .tic{filter:none;opacity:1}
 .tabintro{margin:.9rem 0 0;color:var(--muted);font-size:.9rem}
 
 /* Pasos numerados */
