@@ -34,9 +34,9 @@ S.home = {type:"menu", title:"¿En qué te ayudo?",
   intro:"Elige la guía que necesitas.",
   items:[
     {ic:"🖨️", t:"La impresora", sub:"Epson XP-2200: luces, papel, tinta, Wi-Fi…", to:"printer"},
-    {ic:"🎥", t:"Videollamadas con Teams", sub:"Entrar a una clase, compartir pantalla…", to:"teams"},
-    {ic:"📦", t:"Paquetes en Citibox", sub:"Recoger un paquete del buzón del portal", to:"citibox"},
-    {ic:"🚇", t:"Transporte de París en el iPhone", sub:"La tarjeta Navigo en Cartera (Wallet)", to:"navigo"}
+    {ic:"🎥", t:"Videollamadas", sub:"Microsoft Teams: entrar a una clase, compartir pantalla…", to:"teams"},
+    {ic:"📦", t:"Buzón Citibox", sub:"Recoger un paquete del buzón del portal", to:"citibox"},
+    {ic:"🚇", t:"Tarjeta Navigo", sub:"Transporte de París en Cartera (Wallet) del iPhone", to:"navigo"}
   ]
 };
 
