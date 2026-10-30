@@ -375,6 +375,8 @@ function bindTabs(){
       document.getElementById(t.getAttribute("aria-controls")).hidden = i!==j;
     });
     if(focus) tabs[i].focus({preventScroll:true});
+    /* Con el teclado el lector ya anuncia la pestaña al enfocarla */
+    else document.getElementById("status").textContent = "Pestaña " + tabs[i].lastChild.textContent.trim();
     reveal(tabs[i]);
     TAB = keys[i];
     stopSpeech();
@@ -625,6 +627,7 @@ function setFs(n){
   document.documentElement.setAttribute("data-fs", String(n));
   document.querySelectorAll(".sizes-list button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.dataset.fs === String(n))); });
   try{ localStorage.setItem("fs", String(n)); }catch(e){}
+  headerH();
 }
 document.querySelectorAll(".sizes-list button").forEach(function(b){ b.addEventListener("click", function(){ setFs(b.dataset.fs); closeSizes(true); }); });
 
@@ -643,9 +646,27 @@ sizesToggle.addEventListener("click", function(){
 });
 document.addEventListener("click", function(e){ if(!sizes.contains(e.target)) closeSizes(); });
 document.addEventListener("keydown", function(e){ if(e.key === "Escape") closeSizes(true); });
+/* Alto de la cabecera fija, para que el foco no quede debajo (0 cuando no está fija) */
+var header = document.querySelector("header");
+function headerH(){
+  var h = getComputedStyle(header).position === "sticky" ? header.offsetHeight : 0;
+  document.documentElement.style.setProperty("--header-h", h + "px");
+}
+if(window.ResizeObserver) new ResizeObserver(headerH).observe(header);
+window.addEventListener("resize", headerH);
 var saved = "0"; try{ saved = localStorage.getItem("fs") || "0"; }catch(e){}
 setFs(saved);
 
-window.addEventListener("hashchange", function(){ navCount++; render(); });
+/* "Saltar al contenido" va al título sin cambiar la dirección (si no, el router cargaría Inicio) */
+document.querySelector(".skip").addEventListener("click", function(e){
+  e.preventDefault();
+  var h1 = main.querySelector("h1") || main;
+  h1.focus(); h1.scrollIntoView();
+});
+/* Solo las direcciones de pantalla (#/...) cambian de pantalla */
+window.addEventListener("hashchange", function(){
+  if(location.hash && location.hash.indexOf("#/") !== 0) return;
+  navCount++; render();
+});
 render();
 })();

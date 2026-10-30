@@ -56,7 +56,7 @@ S.printer = {type:"menu", title:"¿Qué le pasa a la impresora?",
 };
 
 /* ---- Luces ---- */
-var CARDS_HINT = "En el dibujo, las luces apagadas o muy claras no importan. Fíjate solo en las que tienen color y texto debajo.";
+var CARDS_HINT = "Fíjate en las luces de color: debajo pone si están fijas o parpadean. Las apagadas no importan.";
 S.lights = {type:"cards", title:"¿Qué luz te llama la atención?",
   intro:"Mira los botones de la parte delantera de la impresora. Elige arriba la luz que está encendida o parpadeando.", tabsLabel:"Luz",
   tabs:[
