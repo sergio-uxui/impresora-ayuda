@@ -11,6 +11,7 @@ function secOf(id){
   if(id === "home") return "hub";
   if(id === "teams" || id.indexOf("t-") === 0) return "teams";
   if(id === "citibox" || id.indexOf("c-") === 0) return "citibox";
+  if(id === "navigo" || id.indexOf("n-") === 0) return "navigo";
   return "printer";
 }
 var SEC = SECTIONS.hub;

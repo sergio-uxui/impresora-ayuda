@@ -21,7 +21,9 @@ var SECTIONS = {
   teams:   {label:"Videollamadas", home:"teams", ok:"t-ok", help:"t-help", srcPrefix:"",
             foot:"Guía no oficial, basada en las páginas de ayuda de Microsoft y de varias universidades. Teams cambia a menudo: si un botón no está donde se dice, busca su icono."},
   citibox: {label:"Citibox", home:"citibox", ok:"c-ok", help:"c-help", srcPrefix:"",
-            foot:"Guía no oficial sobre los buzones inteligentes Citibox. Las ilustraciones son propias; la app y la cerradura pueden verse algo distintas según el modelo."}
+            foot:"Guía no oficial sobre los buzones inteligentes Citibox. Las ilustraciones son propias; la app y la cerradura pueden verse algo distintas según el modelo."},
+  navigo:  {label:"Navigo", home:"navigo", ok:"navigo", help:"navigo", srcPrefix:"",
+            foot:"Guía no oficial sobre la tarjeta Navigo en Cartera (Wallet) del iPhone. Los pases y sus condiciones los fija Île-de-France Mobilités y pueden cambiar."}
 };
 
 /* ========= DATOS ========= */
@@ -33,7 +35,8 @@ S.home = {type:"menu", title:"¿En qué te ayudo?",
   items:[
     {ic:"🖨️", t:"La impresora", sub:"Epson XP-2200: luces, papel, tinta, Wi-Fi…", to:"printer"},
     {ic:"🎥", t:"Videollamadas con Teams", sub:"Entrar a una clase, compartir pantalla…", to:"teams"},
-    {ic:"📦", t:"Paquetes en Citibox", sub:"Recoger un paquete del buzón del portal", to:"citibox"}
+    {ic:"📦", t:"Paquetes en Citibox", sub:"Recoger un paquete del buzón del portal", to:"citibox"},
+    {ic:"🚇", t:"Transporte de París en el iPhone", sub:"La tarjeta Navigo en Cartera (Wallet)", to:"navigo"}
   ]
 };
 
@@ -751,3 +754,65 @@ S["c-help"] = {type:"help", title:"Si el buzón no se abre",
     '<p>El servicio de atención de Citibox puede ayudarte con el buzón y con tu pedido.</p>'+
     '<a class="btn block primary" href="https://www.citibox.com/" target="_blank" rel="noopener">Web de Citibox</a>'
 };
+
+
+/* ################ NAVIGO EN EL IPHONE ################ */
+/* Pantallas con prefijo "n-" y la entrada "navigo". Todo en una página con pestañas. */
+S.navigo = {type:"guide", title:"La tarjeta Navigo en el iPhone",
+  lead:"Con la Navigo en Cartera (Wallet) viajas en el transporte de París y su región acercando el iPhone al lector, sin tarjeta de plástico.",
+  tabsLabel:"Qué quieres hacer",
+  blocks:[
+    {k:"list", h:"Antes de empezar", items:[
+      "Necesitas tener **abierta la sesión de iCloud** en el iPhone.",
+      "Y una **tarjeta de crédito o débito** añadida a Cartera: los pases solo se pagan con **Apple Pay**.",
+      "Una Navigo en el iPhone vale para **un viajero**. Si viajas con otras personas, cada una necesita su propia Navigo digital."
+    ]}
+  ],
+  tabs:[
+    {id:"add", ic:"➕", label:"Añadirla", blocks:[
+      {k:"steps", items:[
+        "Abre la app **Cartera** y pulsa **+**.",
+        {t:"Elige **Tarjeta de transporte**.", n:"Si el iPhone está en inglés, se llama **Transit Card**."},
+        "Busca **Francia**, pulsa **Navigo** y luego **Continuar**.",
+        "Elige el pase que quieres comprar y pulsa **Comprar**.",
+        "Confirma el pago con **Apple Pay**. La Navigo queda guardada en Cartera."
+      ]},
+      {k:"btns", items:[{label:"¿Qué pase elijo?", to:"navigo/pass"}]}
+    ]},
+    {id:"pass", ic:"🎟️", label:"Qué pase elegir", blocks:[
+      {k:"p", t:"La lista de lo que se vende dentro del móvil la da **Île-de-France Mobilités (IDFM)**. Según su página, hoy incluye:"},
+      {k:"list", items:[
+        "**Navigo** Día, Semana y Mes.",
+        "**Paris Visite** de 1, 2, 3 y 5 días.",
+        "Billetes de **bus y tranvía**.",
+        "Billetes de **aeropuerto**, incluido RoissyBus."
+      ]},
+      {k:"tip", h:"Para visitar París", t:"Lo normal es **Navigo Día, Semana o Mes**, o **Paris Visite**."},
+      {k:"warn", h:"Semana y Mes, fuera de Cartera", t:"La Navigo **Semana** y la **Mes** no se compran en Cartera. Se compran en la app de **IDFM**, en **Bonjour RATP** o en **SNCF Connect**, con una cuenta de **IDFM Connect**, y después se añaden a la Navigo de Cartera."},
+      {k:"tip", h:"Sin comprobar", t:"Parece que la Navigo Semana vale **de lunes a domingo**, no siete días desde que la compras. Compruébalo antes de comprarla."}
+    ]},
+    {id:"use", ic:"📲", label:"Cómo usarla", blocks:[
+      {k:"steps", items:[
+        {t:"La primera Navigo que añades se configura sola en **Modo Exprés**.", n:"Así no tienes que abrir nada para pasar."},
+        {t:"En el torniquete, acerca la **parte de arriba del iPhone** al lector.", n:"No hace falta desbloquearlo."},
+        "Para usar otra tarjeta, abre **Cartera** o pulsa **dos veces el botón lateral** y elígela."
+      ]},
+      {k:"warn", h:"En algunos autobuses", t:"El Modo Exprés no está disponible y tienes que identificarte con **Face ID** o con el **código** del iPhone."}
+    ]},
+    {id:"top", ic:"🔄", label:"Recargar", blocks:[
+      {k:"steps", items:[
+        "Abre **Cartera** y entra en la **Navigo**.",
+        "Pulsa **Más** y luego **Comprar pases**.",
+        {t:"Elige el pase y confirma con **Apple Pay**.", n:"Para repetir un pase que ya usaste, elige **Comprar más**."}
+      ]}
+    ]},
+    {id:"help", ic:"🛠️", label:"Si algo falla", lead:"Pulsa lo que te pasa para ver qué hacer.", blocks:[
+      {k:"acc", items:[
+        {q:"Me quedo sin batería", a:["Con el Modo Exprés, una guía de terceros dice que funciona hasta **5 horas** después de que el iPhone se apague. Otra fuente dice que no necesita batería.","**No cuentes con ello**: mejor sal con batería."]},
+        {q:"Cambio de móvil o lo pierdo", a:["La Navigo solo puede estar en **un dispositivo a la vez**.","Si la eliminas, el **saldo se guarda** y puedes pasarla a otro iPhone con la misma cuenta Apple.","Si pierdes el móvil, una guía de terceros dice que se puede desactivar con la app **Buscar**."]},
+        {q:"Necesito un recibo o factura", a:"Las compras en Cartera **no generan justificante** automático. Si necesitas factura, compra el pase desde una app de venta (IDFM, Bonjour RATP o SNCF Connect)."},
+        {q:"Han desaparecido mis tarjetas", a:"Si cierras la sesión de iCloud o quitas Face ID o el código del iPhone, **se borran las tarjetas** de ese dispositivo. Vuelve a activarlos y añade la Navigo otra vez."}
+      ]}
+    ]}
+  ],
+  src:"Île-de-France Mobilités, Apple y guías de terceros (indicado en cada caso)"};
