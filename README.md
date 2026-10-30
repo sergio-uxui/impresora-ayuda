@@ -29,7 +29,7 @@ js/app.js         Lógica: navegación, secciones, luces de la impresora, barra 
 
 - Teléfono de contacto: `CONTACT` al inicio de `js/data.js`.
 - Cada pantalla es una entrada de `S`. La de inicio es `S.home`; cada guía tiene su entrada (`S.printer`, `S["teams"]`).
-- Las pantallas de **Teams** llevan el prefijo `t-` (`t-join`, `t-share`…) , las de **Citibox**, `c-`, y las de **Navigo** (transporte de París en el iPhone), `n-`. Las de la impresora no.
+- Las pantallas de **Teams** llevan el prefijo `t-` (`t-join`, `t-share`…), las de **Citibox**, `c-`, y las de **Navigo** (transporte de París en el iPhone), `n-`. Las de la impresora no.
 - Una pantalla pertenece a una sección según su identificador (ver `secOf` en `js/app.js`). `SECTIONS` define, para cada una, su nombre en las migas, el pie y adónde llevan “Sí, ya funciona” y “Volver al inicio”.
 - Tipos de pantalla: `menu`, `cards`, `guide`, `panel`, `done`, `help`.
 - **Tres niveles como máximo** (sección › tema › contenido). Cuando un tema tiene variantes, van en **pestañas** dentro de la misma pantalla en lugar de abrir otra: `tabs:[{id, label, ic, …}]` con `tabsLabel` como nombre del grupo. En un `menu` cada pestaña lleva `items`; en `cards`, `cards`; en una `guide`, `lead`, `lamps`, `blocks` y `src` (los `blocks` de la guía van antes de las pestañas y `after`, después).
