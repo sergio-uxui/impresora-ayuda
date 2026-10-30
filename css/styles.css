@@ -532,6 +532,79 @@ details.acc .accb{padding:0 1.1rem .9rem}
 @keyframes c-toast5{0%,78%{opacity:0}84%,100%{opacity:1}}
 
 /* Vídeo de YouTube que se carga al pulsar */
+
+/* ---- Navigo en Cartera (iPhone) ---- */
+.demo.mini.dn{max-width:22rem}
+.demo.mini.dn .demo-screen{aspect-ratio:1/1;background:#e6e8ee;color:#1b1c24;font-size:clamp(9px,3.6cqw,14px)}
+.dn .c-phone{top:3%;bottom:3%;aspect-ratio:9/16}
+.dn .c-scr{font-size:1em}
+.dn .c-tap{width:16%;margin:-8% 0 0 -8%}
+.n-phone .c-scr{background:#fff}
+.n-top{display:flex;align-items:center;justify-content:space-between;padding:1.6em .7em .5em;font-size:1.05em}
+.n-top b{font-weight:800}
+.n-plus{width:1.6em;height:1.6em;border-radius:50%;background:#e9e9ee;display:flex;align-items:center;justify-content:center;font-weight:700;animation-name:n-plus}
+@keyframes n-plus{0%,42%,54%,100%{background:#e9e9ee;color:inherit}45%,51%{background:#0a84ff;color:#fff}}
+.n-card{margin:.3em .7em;aspect-ratio:1.586;border-radius:7px;padding:.5em .6em;color:#fff;display:flex;flex-direction:column;justify-content:space-between;font-size:.85em}
+.n-card b{font-size:1.2em;letter-spacing:.02em}
+.n-card.bank{background:linear-gradient(135deg,#2b2d3a,#5b5f78)}
+.n-card.navigo{background:linear-gradient(135deg,#6b3fa0,#2a6fdb)}
+.n-sheet,.n-pay{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:12px 12px 0 0;box-shadow:0 -4px 16px rgba(0,0,0,.22);padding:.8em .6em 1.2em;display:flex;flex-direction:column;gap:.35em}
+.n-sheet{transform:translateY(105%);animation-name:n-sheet}
+@keyframes n-sheet{0%,54%{transform:translateY(105%)}64%,100%{transform:none}}
+.n-sheet i,.n-list i,.n-pay i{font-style:normal;background:#f2f2f7;border-radius:7px;padding:.55em .5em;display:flex;flex-direction:column;position:relative}
+.n-list{display:flex;flex-direction:column;gap:.35em;padding:.2em .6em}
+.n-list small{opacity:.65;font-size:.85em}
+.n-check{position:absolute;right:.5em;top:50%;transform:translateY(-50%);font-weight:800;opacity:0;animation-name:n-check}
+@keyframes n-check{0%,34%{opacity:0}36%,100%{opacity:1}}
+.n-search{margin:.2em .6em .5em;background:#f2f2f7;border-radius:7px;padding:.45em .5em;color:#6b6b73;white-space:nowrap}
+.n-typed{display:inline-block;vertical-align:bottom;overflow:hidden;width:0;color:#1b1c24;animation-name:n-type}
+.dn3 .n-typed{animation-timing-function:steps(7,end)}
+@keyframes n-type{0%,6%{width:0}20%,100%{width:7ch}}
+.n-res{animation-name:n-show}
+@keyframes n-show{0%,21%{opacity:0}24%,100%{opacity:1}}
+.n-go{position:absolute;left:8%;right:8%;bottom:5%;padding:.6em 0;border-radius:9px;text-align:center;font-weight:700;color:#fff;background:#c7c7cc}
+.dn3 .n-go,.dn4 .n-go{animation-name:n-go}
+@keyframes n-go{0%,34%{background:#c7c7cc}36%,69%,76%,100%{background:#0a84ff}71%,74%{background:#0060c8}}
+.dn2 .n-pick{animation-name:n-pick}
+@keyframes n-pick{0%,43%{background:#f2f2f7;color:inherit}45%,100%{background:#0a84ff;color:#fff}}
+.dn3 .n-pick,.dn4 .n-pick{animation-name:n-pick2}
+@keyframes n-pick2{0%,33%{background:#f2f2f7;color:inherit}35%,100%{background:#0a84ff;color:#fff}}
+/* Toque: --x/--y es el punto pulsado; en n-tap2, --x2/--y2 el segundo */
+.dn1 .c-tap,.dn2 .c-tap{animation-name:n-tap}
+.dn3 .c-tap,.dn4 .c-tap{animation-name:n-tap2}
+@keyframes n-tap{0%,22%{opacity:0;left:60%;top:80%;transform:scale(1)}36%{opacity:1;left:var(--x);top:var(--y);transform:scale(1)}42%{transform:scale(.7)}48%{opacity:1;transform:scale(1)}54%,100%{opacity:0;left:var(--x);top:var(--y)}}
+@keyframes n-tap2{0%,16%{opacity:0;left:60%;top:80%;transform:scale(1)}28%{opacity:1;left:var(--x);top:var(--y);transform:scale(1)}33%{transform:scale(.7)}38%{transform:scale(1)}52%{opacity:1;left:var(--x2);top:var(--y2);transform:scale(1)}66%{left:var(--x2);top:var(--y2);transform:scale(1)}70%{transform:scale(.7)}75%{opacity:1;transform:scale(1)}80%,100%{opacity:0;left:var(--x2);top:var(--y2)}}
+.dn1 .c-tap{--x:84%;--y:9%}
+.dn2 .c-tap{--x:50%;--y:27%}
+.dn3 .c-tap{--x:50%;--y:30%;--x2:50%;--y2:91%}
+.dn4 .c-tap{--x:50%;--y:17%;--x2:50%;--y2:91%}
+/* Apple Pay */
+.n-pay{animation-name:n-pay}
+@keyframes n-pay{0%,8%{transform:translateY(105%)}16%,76%{transform:none}84%,100%{transform:translateY(105%)}}
+.n-face{align-self:center;width:2.4em;height:2.4em;border-radius:50%;border:3px solid #d1d1d6;margin-top:.3em;animation-name:n-face}
+@keyframes n-face{0%,38%{transform:rotate(0);border-color:#d1d1d6}40%{border-color:#d1d1d6;border-top-color:#0a84ff}56%{transform:rotate(720deg);border-color:#d1d1d6;border-top-color:#0a84ff}58%,100%{transform:rotate(720deg);border-color:#2fbf71}}
+.n-msg{position:relative;text-align:center;font-size:.75em;min-height:2.6em}
+.n-msg small{position:absolute;inset:0;font-size:1em}
+.n-dbl{color:#6b6b73;animation-name:n-dbl}
+@keyframes n-dbl{0%,56%{opacity:1}58%,100%{opacity:0}}
+.n-done{color:#1f9d55;font-weight:700;opacity:0;animation-name:n-done}
+@keyframes n-done{0%,56%{opacity:0}58%,100%{opacity:1}}
+.n-side{position:absolute;right:-3%;top:20%;width:3%;height:12%;border-radius:0 3px 3px 0;background:#3a3a3c;animation-name:n-side}
+@keyframes n-side{0%,26%,30%,33%,37%,100%{background:#3a3a3c;transform:none}28%,35%{background:#0a84ff;transform:translateX(-35%)}}
+.dn5 .n-card.navigo{opacity:0;animation-name:n-new}
+@keyframes n-new{0%,80%{opacity:0;transform:translateY(20%)}88%,100%{opacity:1;transform:none}}
+/* Torniquete */
+.n-gate{position:absolute;right:8%;top:16%;bottom:0;width:26%;background:#9aa0aa;border-radius:10px 10px 0 0}
+.n-pad{position:absolute;left:14%;right:14%;top:8%;aspect-ratio:1;border-radius:50%;background:#2b2d3a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.2em}
+.n-led{position:absolute;left:50%;top:52%;width:16%;aspect-ratio:1;margin-left:-8%;border-radius:50%;background:#e5484d;animation-name:n-led}
+@keyframes n-led{0%,44%{background:#e5484d;box-shadow:0 0 6px #e5484d}48%,80%{background:#2fbf71;box-shadow:0 0 10px #2fbf71}86%,100%{background:#e5484d;box-shadow:0 0 6px #e5484d}}
+.dn .c-phone.n-move{left:6%;top:24%;bottom:4%;transform:none;transform-origin:50% 100%;animation-name:n-move}
+@keyframes n-move{0%,10%{transform:none}38%,72%{transform:translate(32%,-6%) rotate(16deg)}90%,100%{transform:none}}
+.dn6 .c-scr{background:linear-gradient(160deg,#20263a,#4a3d6b);color:#fff;align-items:center}
+.n-clock{font-size:1.9em;font-weight:300;margin-top:18%}
+.n-pop{position:absolute;left:6%;right:6%;top:40%;margin:0;opacity:0;animation-name:n-pop}
+@keyframes n-pop{0%,40%{opacity:0;transform:scale(.9)}46%,80%{opacity:1;transform:none}88%,100%{opacity:0}}
+
 .video{margin:1.6rem 0;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow)}
 .video-play,.video iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:10px;overflow:hidden}
 .video-play{position:relative;padding:0;cursor:pointer;background:#141413}
@@ -545,6 +618,9 @@ details.acc .accb{padding:0 1.1rem .9rem}
 @media (prefers-reduced-motion:reduce){
   .demo-screen *,.ds3 .d-sw::after{animation:none!important}
   .d-cursor,.c-tap,.demo-toggle,.ds1 .d-picker{display:none}
+  .n-sheet{transform:none}
+  .n-typed{width:7ch}
+  .n-check,.n-pop{opacity:1}
 }
 
 footer{border-top:1px solid var(--line);padding:20px 0 36px;color:var(--muted);font-size:.8rem}

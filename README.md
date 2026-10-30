@@ -36,7 +36,7 @@ js/app.js         Lógica: navegación, secciones, luces de la impresora, barra 
 - La pestaña elegida va en la dirección: `#/g-wifi/codes` abre “Código E-…”. Sirve también en los enlaces (`to:"lights/ink"`, `[[g-replace/on|…]]`).
 - Bloques de una guía (`blocks`): `p`, `warn`, `tip`, `steps`, `list`, `cases`, `acc`, `btns`, `toolbar`, `demo` y `video` (vídeo de YouTube que solo se carga al pulsar: `{k:"video", yt:"<id>", t:"título"}`).
 - `demo` es una animación en bucle (como un GIF) que repite una acción: `{k:"demo", v:"<nombre en DEMOS>"}`. Se dibuja con HTML y CSS en `DEMOS` (`js/app.js`); tiene botón de pausa y, con movimiento reducido, muestra una imagen fija.
-- Un paso también puede llevar su propia animación debajo: `{t:"…", demo:"join-link"}` (ver "Entrar con el enlace" y "Compartir pantalla").
+- Un paso también puede llevar su propia animación debajo: `{t:"…", demo:"join-link"}` (ver "Entrar con el enlace", "Compartir pantalla", Citibox y Navigo).
 - Texto: `**negrita**` y enlaces internos con `[[id-de-pantalla|texto]]`.
 - Cada guía lleva `src` con su fuente.
 

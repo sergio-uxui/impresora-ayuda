@@ -250,7 +250,51 @@ function demoCbOpen(){
     dNote("Abre la puerta, saca el paquete y ciérrala bien."));
 }
 
-var DEMOS = {"cb-notice": demoCbNotice, "cb-go": demoCbGo, "cb-scan": demoCbScan, "cb-letter": demoCbLetter, "cb-code": demoCbCode, "cb-open": demoCbOpen, "share-btn": demoShareBtn, "share-pick": demoSharePick, "share-sound": demoShareSound, "share-border": demoShareBorder, "share-stop": demoShareStop, "join-link": demoJoinLink, "join-open": demoJoinOpen, "join-login": demoJoinLogin, "join-prejoin": demoJoinPrejoin, "join-wait": demoJoinWait};
+/* Navigo en Cartera (iPhone). "side" dibuja el botón lateral */
+function nPhone(cls, inner, side){ return '<div class="c-phone n-phone '+cls+'">'+(side?'<i class="n-side"></i>':'')+'<div class="c-scr">'+inner+'</div></div>'; }
+function demoNvOpen(){
+  return demoFig("mini dn dn1",
+    nPhone("", '<div class="n-top"><b>Cartera</b><span class="n-plus">+</span></div>' +
+      '<div class="n-card bank"><b>Mi banco</b><small>•••• 4821</small></div>' +
+      '<div class="n-sheet"><b>Añadir a Cartera</b><i>💳 Débito o crédito</i><i>🚇 Tarjeta de transporte</i><i>🎟️ Pases y entradas</i></div>' + C_TAP),
+    dNote("Abre **Cartera** y pulsa **+**."));
+}
+function demoNvType(){
+  return demoFig("mini dn dn2",
+    nPhone("", '<div class="n-top"><b>Añadir a Cartera</b></div><div class="n-list">' +
+      '<i>💳 Débito o crédito</i><i class="n-pick">🚇 Tarjeta de transporte</i><i>🎟️ Pases y entradas</i><i>🔑 Llaves</i></div>' + C_TAP),
+    dNote("Elige **Tarjeta de transporte**."));
+}
+function demoNvFind(){
+  return demoFig("mini dn dn3",
+    nPhone("", '<div class="n-top"><b>Transporte</b></div>' +
+      '<div class="n-search">🔍 <span class="n-typed">Francia</span></div>' +
+      '<div class="n-list n-res"><i class="n-pick">🇫🇷 Navigo<small>Île-de-France</small></i></div>' +
+      '<span class="n-go">Continuar</span>' + C_TAP),
+    dNote("Busca **Francia**, elige **Navigo** y pulsa **Continuar**."));
+}
+function demoNvPass(){
+  return demoFig("mini dn dn4",
+    nPhone("", '<div class="n-top"><b>Elige un pase</b></div><div class="n-list">' +
+      '<i class="n-pick">Navigo Día<span class="n-check">✓</span></i><i>Paris Visite</i><i>Bus y tranvía</i><i>Aeropuerto</i></div>' +
+      '<span class="n-go">Comprar</span>' + C_TAP),
+    dNote("Elige el pase y pulsa **Comprar**."));
+}
+function demoNvPay(){
+  return demoFig("mini dn dn5",
+    nPhone("", '<div class="n-top"><b>Cartera</b></div><div class="n-card navigo"><b>navigo</b><small>Navigo Día</small></div>' +
+      '<div class="n-pay"><b>Apple Pay</b><i>💳 •••• 4821</i><i>Navigo Día</i><span class="n-face"></span>' +
+      '<div class="n-msg"><small class="n-dbl">Pulsa dos veces el botón lateral</small><small class="n-done">✓ Hecho</small></div></div>', true),
+    dNote("Confirma con **Apple Pay**: pulsa dos veces el botón lateral."));
+}
+function demoNvTap(){
+  return demoFig("mini dn dn6",
+    '<div class="n-gate"><span class="n-pad">)))</span><span class="n-led"></span></div>' +
+    nPhone("n-move", '<span class="n-clock">9:41</span><div class="n-card navigo n-pop"><b>navigo</b><small>✓ Hecho</small></div>'),
+    dNote("Acerca la **parte de arriba** del iPhone al lector, sin desbloquearlo."));
+}
+
+var DEMOS = {"nv-open": demoNvOpen, "nv-type": demoNvType, "nv-find": demoNvFind, "nv-pass": demoNvPass, "nv-pay": demoNvPay, "nv-tap": demoNvTap, "cb-notice": demoCbNotice, "cb-go": demoCbGo, "cb-scan": demoCbScan, "cb-letter": demoCbLetter, "cb-code": demoCbCode, "cb-open": demoCbOpen, "share-btn": demoShareBtn, "share-pick": demoSharePick, "share-sound": demoShareSound, "share-border": demoShareBorder, "share-stop": demoShareStop, "join-link": demoJoinLink, "join-open": demoJoinOpen, "join-login": demoJoinLogin, "join-prejoin": demoJoinPrejoin, "join-wait": demoJoinWait};
 
 function renderBlock(b){
   switch(b.k){

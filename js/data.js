@@ -771,11 +771,11 @@ S.navigo = {type:"guide", title:"La tarjeta Navigo en el iPhone",
   tabs:[
     {id:"add", ic:"➕", label:"Añadirla", blocks:[
       {k:"steps", items:[
-        "Abre la app **Cartera** y pulsa **+**.",
-        {t:"Elige **Tarjeta de transporte**.", n:"Si el iPhone está en inglés, se llama **Transit Card**."},
-        "Busca **Francia**, pulsa **Navigo** y luego **Continuar**.",
-        "Elige el pase que quieres comprar y pulsa **Comprar**.",
-        "Confirma el pago con **Apple Pay**. La Navigo queda guardada en Cartera."
+        {t:"Abre la app **Cartera** y pulsa **+**.", demo:"nv-open"},
+        {t:"Elige **Tarjeta de transporte**.", n:"Si el iPhone está en inglés, se llama **Transit Card**.", demo:"nv-type"},
+        {t:"Busca **Francia**, pulsa **Navigo** y luego **Continuar**.", demo:"nv-find"},
+        {t:"Elige el pase que quieres comprar y pulsa **Comprar**.", demo:"nv-pass"},
+        {t:"Confirma el pago con **Apple Pay**. La Navigo queda guardada en Cartera.", demo:"nv-pay"}
       ]},
       {k:"btns", items:[{label:"¿Qué pase elijo?", to:"navigo/pass"}]}
     ]},
@@ -794,7 +794,7 @@ S.navigo = {type:"guide", title:"La tarjeta Navigo en el iPhone",
     {id:"use", ic:"📲", label:"Cómo usarla", blocks:[
       {k:"steps", items:[
         {t:"La primera Navigo que añades se configura sola en **Modo Exprés**.", n:"Así no tienes que abrir nada para pasar."},
-        {t:"En el torniquete, acerca la **parte de arriba del iPhone** al lector.", n:"No hace falta desbloquearlo."},
+        {t:"En el torniquete, acerca la **parte de arriba del iPhone** al lector.", n:"No hace falta desbloquearlo.", demo:"nv-tap"},
         "Para usar otra tarjeta, abre **Cartera** o pulsa **dos veces el botón lateral** y elígela."
       ]},
       {k:"warn", h:"En algunos autobuses", t:"El Modo Exprés no está disponible y tienes que identificarte con **Face ID** o con el **código** del iPhone."}
