@@ -214,6 +214,11 @@ details.acc summary::after{content:"+";font-size:1.4rem;color:var(--muted)}
 details.acc[open] summary::after{content:"–"}
 details.acc .accb{padding:0 1.1rem .9rem}
 
+/* Texto bajo un titular (casos, avisos, consejos, desplegables, tarjetas): un pelín más pequeño y en gris,
+   para que el titular destaque. Las palabras en negrita siguen en negro para que se encuentren rápido */
+.case p,.case .list,.accb,.lcard p,.warn p,.tip p{font-size:.95rem;color:var(--muted)}
+.case p strong,.case .list strong,.accb strong,.lcard p strong,.warn p strong,.tip p strong{color:var(--ink)}
+
 .fix{margin-top:2.4rem;padding:1.3rem;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:var(--shadow)}
 .fix h2{margin-top:0}
 .fix .row{display:grid;gap:8px}
